@@ -38,11 +38,6 @@ class SettingSeeder extends Seeder
             ['key' => 'meta_title',         'value' => 'BumiRealty - Kavling & Properti Terpercaya di Bali'],
             ['key' => 'meta_description',   'value' => 'Temukan kavling strategis dan layanan properti terpercaya di Bali bersama BumiRealty.'],
             ['key' => 'meta_keywords',      'value' => 'kavling, properti bali, jual tanah, beli kavling'],
-
-            // Open Graph (OG) Meta Tags
-            ['key' => 'og_image',           'value' => '/images/contents/bumirealty.png'],
-            ['key' => 'og_title',           'value' => 'BumiRealty - Properti Impian Anda'],
-            ['key' => 'og_description',     'value' => 'Jual beli kavling di lokasi strategis Bali dengan proses aman dan terpercaya.'],
         ];
 
         foreach ($settings as $setting) {

@@ -18,8 +18,14 @@ class HomeController extends Controller
     protected $serviceService;
     protected $testimonialService;
     protected $portofolioService;
-    protected $galleryService; 
+    protected $galleryService;
     protected $articleService;
+
+    // Tambahkan property data
+    protected $products;
+    protected $settings;
+    protected $services;
+    protected $portofolios;
 
     public function __construct(
         ProductService $productService,
@@ -35,8 +41,14 @@ class HomeController extends Controller
         $this->serviceService = $serviceService;
         $this->testimonialService = $testimonialService;
         $this->portofolioService = $portofolioService;
-        $this->galleryService = $galleryService; 
+        $this->galleryService = $galleryService;
         $this->articleService = $articleService;
+
+        // Inisialisasi data utama
+        $this->products = $this->productService->getAllProducts('created_at', 'desc', 'active');
+        $this->settings = $this->settingService->getSettings();
+        $this->services = $this->serviceService->getServices('active');
+        $this->portofolios = $this->portofolioService->getPortofolios('active');
     }
 
     /**
@@ -46,14 +58,79 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = $this->productService->getAllProducts('created_at', 'desc', 'active');
-        $settings = $this->settingService->getSettings();
-        $services = $this->serviceService->getServices('active');
         $testimonials = $this->testimonialService->getTestimonials('active');
-        $portofolios = $this->portofolioService->getPortofolios('active');
-        $gallery = $this->galleryService->getGallery('active'); 
+        $gallery = $this->galleryService->getGallery('active');
         $articles = $this->articleService->getLatestArticles(4);
 
-        return view('home', compact('products', 'settings', 'services', 'testimonials', 'portofolios', 'gallery', 'articles'));
+        return view('home', [
+            'products' => $this->products,
+            'settings' => $this->settings,
+            'services' => $this->services,
+            'testimonials' => $testimonials,
+            'portofolios' => $this->portofolios,
+            'gallery' => $gallery,
+            'articles' => $articles,
+        ]);
+    }
+
+    public function showProduct()
+    {
+        return view('kavling', [
+            'products' => $this->products,
+            'settings' => $this->settings,
+            'services' => $this->services,
+            'portofolios' => $this->portofolios,
+        ]);
+    }
+
+    public function showPortofolio()
+    {
+        return view('portofolio', [
+            'products' => $this->products,
+            'settings' => $this->settings,
+            'services' => $this->services,
+            'portofolios' => $this->portofolios,
+        ]);
+    }
+
+    public function showServices()
+    {
+        return view('services', [
+            'products' => $this->products,
+            'settings' => $this->settings,
+            'services' => $this->services,
+            'portofolios' => $this->portofolios,
+        ]);
+    }
+
+    public function showTestimonials()
+    {
+        $testimonials = $this->testimonialService->getTestimonials('active');
+
+        return view('testimonials', [
+            'products' => $this->products,
+            'settings' => $this->settings,
+            'services' => $this->services,
+            'testimonials' => $testimonials,
+            'portofolios' => $this->portofolios,
+        ]);
+    }
+
+    public function showGallery()
+    {
+        $gallery = $this->galleryService->getGallery('active');
+
+        return view('gallery', [
+            'products' => $this->products,
+            'settings' => $this->settings,
+            'services' => $this->services,
+            'portofolios' => $this->portofolios,
+            'gallery' => $gallery,
+        ]);
+    }
+
+    public function showArticles()
+    {
+        return redirect()->away('https://marketbiz.net');
     }
 }

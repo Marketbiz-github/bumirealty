@@ -1,12 +1,12 @@
 <?php
     $menus = [
-        ['label' => 'Beranda', 'href' => '#', 'active' => true],
-        ['label' => 'Kavling Berjalan', 'href' => '#', 'dropdown' => true, 'type' => 'product'],
-        ['label' => 'Produk Layanan', 'href' => '#', 'dropdown' => true, 'type' => 'service'],
-        ['label' => 'Testimoni Konsumen', 'href' => '#'],
-        ['label' => 'Portofolio Project', 'href' => '#', 'dropdown' => true, 'type' => 'portofolio'],
-        ['label' => 'Galeri Project', 'href' => '#'],
-        ['label' => 'Artikel', 'href' => '#'],
+        ['label' => 'Beranda', 'href' => route('home'), 'active' => request()->routeIs('home')],
+        ['label' => 'Kavling Berjalan', 'href' => route('home.product'), 'dropdown' => true, 'type' => 'product'],
+        ['label' => 'Produk Layanan', 'href' => route('home.services'), 'dropdown' => true, 'type' => 'service'],
+        ['label' => 'Testimoni Konsumen', 'href' => route('home.testimonials')],
+        ['label' => 'Portofolio Project', 'href' => route('home.portofolio'), 'dropdown' => true, 'type' => 'portofolio'],
+        ['label' => 'Galeri Project', 'href' => route('home.Gallery')],
+        ['label' => 'Artikel', 'href' => route('home.articles')],
     ];
 ?>
 
@@ -40,7 +40,7 @@
                                     <div class="w-96" @mouseenter="open = true" @mouseleave="open = false">
                                         @if(isset($menu['type']) && $menu['type'] === 'service')
                                             @foreach($services as $service)
-                                                <a href="#"
+                                                <a href="{{ route('home.services') }}#{{ $service->slug }}"
                                                    class="block w-full px-4 py-4 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                                     {{ $service->title }}
                                                 </a>
@@ -54,7 +54,7 @@
                                                 </a>
                                             @endforeach
                                             @if($portofolios->count() > 5)
-                                                <a href="#"
+                                                <a href="{{ route('home.portofolio') }}"
                                                    class="block w-full px-4 py-2 text-sm font-semibold text-orange-500 hover:underline">
                                                     See more
                                                 </a>
@@ -68,7 +68,7 @@
                                                 </a>
                                             @endforeach
                                             @if($products->count() > 5)
-                                                <a href="#"
+                                                <a href="{{ route('home.product') }}"
                                                    class="block w-full px-4 py-2 text-sm font-semibold text-orange-500 hover:underline">
                                                     See more
                                                 </a>
@@ -124,7 +124,7 @@
                         <div x-show="dropdownOpen" x-transition class="pl-6">
                             @if(isset($menu['type']) && $menu['type'] === 'service')
                                 @foreach($services as $service)
-                                    <a href="#"
+                                    <a href="{{ route('home.services') }}#{{ $service->slug }}"
                                        class="block w-full px-4 py-4 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                         {{ $service->title }}
                                     </a>
@@ -138,7 +138,7 @@
                                     </a>
                                 @endforeach
                                 @if($portofolios->count() > 5)
-                                    <a href="#"
+                                    <a href="{{ route('home.portofolio') }}"
                                        class="block w-full px-4 py-2 text-sm font-semibold text-orange-500 hover:underline">
                                         See more
                                     </a>
@@ -152,7 +152,7 @@
                                     </a>
                                 @endforeach
                                 @if($products->count() > 5)
-                                    <a href="#"
+                                    <a href="{{ route('home.product') }}"
                                        class="block w-full px-4 py-2 text-sm font-semibold text-orange-500 hover:underline">
                                         See more
                                     </a>

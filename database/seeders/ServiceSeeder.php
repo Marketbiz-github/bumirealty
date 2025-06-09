@@ -54,6 +54,7 @@ class ServiceSeeder extends Seeder
             DB::table('services')->insert([
                 'id' => (string) Str::uuid(),
                 'title' => $service['title'],
+                'slug' => Str::slug($service['title']),
                 'description' => $service['description'],
                 'icon' => $service['icon'],
                 'status' => $service['status'] ?? 'active',

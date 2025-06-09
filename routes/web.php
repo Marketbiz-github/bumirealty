@@ -6,6 +6,12 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/kavling', [HomeController::class, 'showProduct'])->name('home.product');
+Route::get('/layanan', [HomeController::class, 'showServices'])->name('home.services');
+Route::get('/portofolio', [HomeController::class, 'showPortofolio'])->name('home.portofolio');
+Route::get('/testimoni', [HomeController::class, 'showTestimonials'])->name('home.testimonials');
+Route::get('/galeri', [HomeController::class, 'showGallery'])->name('home.Gallery');
+Route::get('/artikel', [HomeController::class, 'showArticles'])->name('home.articles');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', function () {

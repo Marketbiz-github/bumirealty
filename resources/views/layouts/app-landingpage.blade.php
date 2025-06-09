@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $settings['meta_title'] ?? $settings['site_title'] ?? 'BumiRealty' }}</title>
-    <meta name="description" content="{{ $settings['meta_description'] ?? '' }}">
-    <meta name="keywords" content="{{ $settings['meta_keywords'] ?? '' }}">
+    <title>@yield('meta_title', $settings['meta_title'] ?? $settings['site_title'] ?? 'BumiRealty')</title>
+    <meta name="description" content="@yield('meta_description', $settings['meta_description'] ?? '')">
+    <meta name="keywords" content="@yield('meta_keywords', $settings['meta_keywords'] ?? '')">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="{{ $settings['og_title'] ?? $settings['meta_title'] ?? $settings['site_title'] ?? 'BumiRealty' }}">
-    <meta property="og:description" content="{{ $settings['og_description'] ?? $settings['meta_description'] ?? '' }}">
-    <meta property="og:image" content="{{ asset($settings['og_image'] ?? '/images/contents/bumirealty.png') }}">
+    <meta property="og:title" content="@yield('meta_title', $settings['meta_title'] ?? 'BumiRealty - Kavling & Properti Terpercaya di Bali')">
+    <meta property="og:description" content="@yield('meta_description', $settings['meta_description'] ?? 'Temukan kavling strategis dan layanan properti terpercaya di Bali bersama BumiRealty.')">
+    <meta property="og:image" content="@yield('og_image', asset($settings['logo'] ?? '/images/contents/bumirealty.png'))">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:site_name" content="{{ $settings['site_title'] ?? 'BumiRealty' }}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $settings['twitter_title'] ?? $settings['meta_title'] ?? $settings['site_title'] ?? 'BumiRealty' }}">
-    <meta name="twitter:description" content="{{ $settings['twitter_description'] ?? $settings['meta_description'] ?? '' }}">
-    <meta name="twitter:image" content="{{ asset($settings['twitter_image'] ?? $settings['og_image'] ?? '/images/contents/bumirealty.png') }}">
+    <meta property="og:site_name" content="{{ $settings['site_title'] ?? 'BumiRealty.id' }}">
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('meta_title', $settings['meta_title'] ?? 'BumiRealty - Kavling & Properti Terpercaya di Bali')">
+    <meta name="twitter:description" content="@yield('meta_description', $settings['meta_description'] ?? 'Temukan kavling strategis dan layanan properti terpercaya di Bali bersama BumiRealty.')">
+    <meta name="twitter:image" content="@yield('og_image', asset($settings['logo'] ?? '/images/contents/bumirealty.png'))">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/font.css') }}">
     <link rel="icon" type="image/png" href="{{ asset($settings['favicon'] ?? '/images/contents/favicon.ico') }}">
@@ -40,6 +42,9 @@
     @include('components.cta')
     <!-- Footer -->
     @include('components.footer')
+
+    {{-- submenu --}}
+    @include('components.submenu')
 
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/6281234567890" target="_blank"
