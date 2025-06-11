@@ -15,10 +15,10 @@ Route::get('/artikel', [HomeController::class, 'showArticles'])->name('home.arti
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', function () {
-        return view('dashboard');
+        return view('dashboard.dashboard');
     })->name('dashboard');
 
-    Route::prefix('products')->group(function () {
+    Route::prefix('kavling')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');
         // Tambahkan route lain terkait products di sini jika diperlukan
     });
