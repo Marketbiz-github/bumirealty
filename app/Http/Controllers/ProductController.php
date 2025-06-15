@@ -27,29 +27,18 @@ class ProductController extends Controller
     public function index()
     {
         return view('dashboard.kavling', [
-            'products' => $this->productService->getAllProducts('created_at', 'desc', 'active'),
+            'products' => $this->productService->getAllProducts('updated_at', 'desc', null),
             'settings' => $this->settings,
         ]);
     }
 
-    /**
-     * Show the form for creating a new product.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('dashboard.kavling-create', [
             'settings' => $this->settings,
         ]);
     }
-
-    /**
-     * Store a newly created product in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         try {
@@ -97,54 +86,52 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Display the specified product.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return view('products.show', compact('id'));
-    }
-
-    /**
-     * Show the form for editing the specified product.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        return view('products.edit', compact('id'));
+        $product = $this->productService->findById($id);
+        if (!$product) abort(404);
+
+        return view('dashboard.kavling-edit', [
+            'product' => $product,
+            'settings' => $this->settings,
+        ]);
     }
 
-    /**
-     * Update the specified product in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        // Validation and update logic here
-        
-        return redirect()->route('products.index')
-            ->with('success', 'Product updated successfully.');
+        try {
+            $validated = $request->validate([
+                'status' => 'required|in:active,inactive',
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'description' => 'nullable',
+                'thumbnail' => 'nullable|image|mimes:jpeg,png|max:1024',
+                'images' => 'nullable|array|max:5',
+                'images.*' => 'image|mimes:jpeg,png|max:2048',
+                'attributes.luas-tanah' => 'required',
+                'attributes.lokasi' => 'required',
+                'attributes.gmaps-url' => 'nullable|url',
+            ]);
+
+            // dd($request->all(), $validated, $request->file('thumbnail'), $request->file('images'));
+
+            $this->productService->update(
+                $id,
+                $validated,
+                $request->file('thumbnail'),
+                $request->file('images')
+            );
+
+            return redirect()
+                ->route('products.index')
+                ->with('success', 'Kavling berhasil diupdate.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Gagal update kavling. ' . $e->getMessage());
+        }
     }
 
-    /**
-     * Remove the specified product from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        // Delete logic here
-        
-        return redirect()->route('products.index')
-            ->with('success', 'Product deleted successfully.');
-    }
 }

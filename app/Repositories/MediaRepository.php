@@ -65,6 +65,11 @@ class MediaRepository
     {
         return DB::table($this->table)
             ->where('id', $id)
-            ->update(['status' => 'deleted', 'updated_at' => now()]);
+            ->update(['status' => 'inactive', 'updated_at' => now()]);
+    }
+    
+    public function findById($id)
+    {
+        return DB::table($this->table)->where('id', $id)->first();
     }
 }

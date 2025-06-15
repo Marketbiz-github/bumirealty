@@ -95,7 +95,7 @@
                                 </template>
                                 @if($hasActions)
                                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <a :href="`/${routePrefix}/${item.id}/edit`" class="text-teal-600 hover:text-teal-900">Edit</a>
+                                        <a :href="`/dashboard/${routePrefix}/${item.id}/edit`" class="text-teal-600 hover:text-teal-900">Edit</a>
                                     </td>
                                 @endif
                             </tr>

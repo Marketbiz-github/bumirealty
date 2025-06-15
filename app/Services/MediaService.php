@@ -60,4 +60,9 @@ class MediaService
             throw $e;
         }
     }
+
+    public function deleteImage($mediaId)
+    {
+        $this->mediaRepository->delete($mediaId);
+    }
 }

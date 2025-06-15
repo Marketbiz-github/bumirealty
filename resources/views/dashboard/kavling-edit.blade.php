@@ -1,28 +1,46 @@
 @extends('layouts.app')
 
-@section('title', 'Create Kavling')
+@section('title', 'Edit Kavling')
 
 @section('content')
 <div class="">
     <x-breadcrumb :items="[
         ['label' => 'Kavling', 'url' => route('products.index')],
-        ['label' => 'Create']
+        ['label' => 'Edit']
     ]" />
 
     <div class="mt-8">
-        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
+            @method('PUT')
 
             <!-- Kavling Information -->
             <div class="bg-white rounded-lg shadow p-6 space-y-5">
                 <h2 class="text-lg font-medium text-gray-900">Kavling Information</h2>
                 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                        <x-input-label for="name" value="Nama" />
-                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
-                            :value="old('name')" required />
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1">
+                            <x-input-label for="name" value="Nama" />
+                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+                                :value="old('name', $product->name ?? '')" required />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+
+                        <div class="flex items-center mt-6">
+                            <label for="status" class="mr-2 text-sm text-gray-700">Active</label>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="hidden" name="status" value="inactive">
+                                <input type="checkbox" id="status" name="status" value="active"
+                                    {{ old('status', $product->status ?? 'active') === 'active' ? 'checked' : '' }}
+                                    class="sr-only peer" />
+                                <div
+                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-teal-500 rounded-full peer peer-checked:bg-teal-600 transition-all duration-300"></div>
+                                <div
+                                    class="absolute left-0.5 top-0.5 w-5 h-5 bg-white border border-gray-300 rounded-full transition-transform duration-300 transform peer-checked:translate-x-full">
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -34,7 +52,7 @@
                                 <span class="text-gray-500 sm:text-sm">Rp</span>
                             </div>
                             <x-text-input id="price" name="price" type="number" class="block w-full pl-12" 
-                                :value="old('price')" required />
+                                :value="old('price', $product->price ?? '')" required />
                         </div>
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
@@ -42,30 +60,30 @@
                     <div>
                         <x-input-label for="luas" value="Luas Tanah (satuan harga)" />
                         <x-text-input id="luas" name="attributes[luas-tanah]" type="text" class="mt-1 block w-full" 
-                            :value="old('attributes.luas-tanah')" required />
+                            :value="old('attributes.luas-tanah', optional(collect($product->attributes)->firstWhere('attribute_slug','luas-tanah'))->value)" required />
                     </div>
 
                     <div>
                         <x-input-label for="lokasi" value="Lokasi" />
                         <x-text-input id="lokasi" name="attributes[lokasi]" type="text" class="mt-1 block w-full" 
-                            :value="old('attributes.lokasi')" required />
+                            :value="old('attributes.lokasi', optional(collect($product->attributes)->firstWhere('attribute_slug','lokasi'))->value)" required />
                     </div>
 
                     <div>
                         <x-input-label for="gmaps" value="Google Maps URL" />
                         <x-text-input id="gmaps" name="attributes[gmaps-url]" type="url" class="mt-1 block w-full" 
-                            :value="old('attributes.gmaps-url')" />
+                            :value="old('attributes.gmaps-url', optional(collect($product->attributes)->firstWhere('attribute_slug','gmaps-url'))->value)" />
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
                     <x-input-label for="description" value="Deskripsi" />
-                    <textarea id="description" name="description" class="hidden">{{ old('description') }}</textarea>
+                    <textarea id="description" name="description" class="hidden">{{ old('description', $product->description ?? '') }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="thumbnail" value="Thumbnail Image *" />
+                    <x-input-label for="thumbnail" value="Thumbnail Image" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="thumbnail-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
@@ -82,16 +100,15 @@
                                 type="file" 
                                 name="thumbnail" 
                                 accept="image/png, image/jpeg"
-                                required
                                 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
                                 aria-label="Upload thumbnail image"
                             />
                         </div>
                         <x-input-error :messages="$errors->get('thumbnail')" class="mt-2" />
                         <!-- Thumbnail Preview -->
-                        <div id="thumbnail-preview" class="hidden">
+                        <div id="thumbnail-preview" class="{{ $product->thumbnail_url ? '' : 'hidden' }}">
                             <div class="relative w-40 h-40 rounded-lg overflow-hidden bg-gray-100">
-                                <img src="" class="w-full h-full object-cover" />
+                                <img src="{{ $product->thumbnail_url ? asset($product->thumbnail_url) : '' }}" class="w-full h-full object-cover" />
                                 <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 hover:opacity-100 transition-all flex items-center justify-center">
                                     <button type="button" id="remove-thumbnail" class="p-2 bg-red-500 rounded-full text-white hover:bg-red-600 focus:outline-none">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +122,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="image" value="Images * (Min. 1 Required)" />
+                    <x-input-label for="image" value="Images (Opsional, max 5)" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
@@ -113,7 +130,7 @@
                                     <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                     </svg>
-                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Upload Images</span> (Required)</p>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Upload Images</span></p>
                                     <p class="text-xs text-gray-500">PNG, JPG up to 2MB each (Max 5 images)</p>
                                 </div>
                             </label>
@@ -123,7 +140,6 @@
                                 name="images[]" 
                                 multiple 
                                 accept="image/png, image/jpeg"
-                                required
                                 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
                                 aria-label="Upload additional images"
                             />
@@ -133,6 +149,21 @@
 
                         <!-- Image Preview Grid -->
                         <div id="image-preview" class="grid grid-cols-2 gap-4 md:grid-cols-5">
+                            @foreach($product->media as $media)
+                                @if(!$media->is_main)
+                                    <div class="relative group aspect-square rounded-lg overflow-hidden bg-gray-100" data-media-id="{{ $media->id }}">
+                                        <img src="{{ asset($media->url) }}" class="w-full h-full object-cover" />
+                                        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 hover:opacity-100 transition-all flex items-center justify-center">
+                                            <button type="button" class="p-2 bg-red-500 rounded-full text-white hover:bg-red-600 focus:outline-none btn-remove-old-image">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="old_images[]" value="{{ $media->id }}">
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -140,7 +171,7 @@
 
             <div class="flex justify-end space-x-3">
                 <x-secondary-button onclick="history.back()">Cancel</x-secondary-button>
-                <x-primary-button>Save</x-primary-button>
+                <x-primary-button>Update</x-primary-button>
             </div>
         </form>
     </div>
@@ -320,6 +351,16 @@
         
         // If all validation passes, submit the form
         this.submit();
+    });
+
+    // Hapus gambar lama (dari server) di preview
+    document.querySelectorAll('.btn-remove-old-image').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const wrapper = btn.closest('[data-media-id]');
+            if (wrapper) {
+                wrapper.remove();
+            }
+        });
     });
 </script>
 @endsection

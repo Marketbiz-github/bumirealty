@@ -71,7 +71,7 @@ class ProductRepository
         }
     }
 
-    public function getAllProducts($sortBy = 'created_at', $direction = 'desc', $status = 'active')
+    public function getAllProducts($sortBy = 'created_at', $direction = 'desc', $status)
     {
         // Ambil produk beserta kategori
         $products = DB::table('products')
@@ -116,5 +116,40 @@ class ProductRepository
         }
 
         return $products;
+    }
+
+    public function findById($id)
+    {
+        $product = DB::table($this->table)->where('id', $id)->first();
+        if (!$product) return null;
+
+        // Ambil media dan attributes seperti di getAllProducts
+        $media = DB::table('media_files')
+            ->where('usage_id', $id)
+            ->where('usage_type', 'product')
+            ->where('status', 'active')
+            ->get();
+        $attributes = DB::table('product_attribute_values')
+            ->leftJoin('product_attributes', 'product_attribute_values.attribute_id', '=', 'product_attributes.id')
+            ->select(
+                'product_attribute_values.*',
+                'product_attributes.name as attribute_name',
+                'product_attributes.slug as attribute_slug',
+                'product_attributes.type as attribute_type'
+            )
+            ->where('product_id', $id)
+            ->get();
+
+        $product->media = $media;
+        $product->attributes = $attributes;
+        $mainMedia = collect($media)->firstWhere('is_main', true);
+        $product->thumbnail_url = $mainMedia->url ?? null;
+
+        return $product;
+    }
+
+    public function deleteAttributes($productId)
+    {
+        DB::table($this->attributeTable)->where('product_id', $productId)->delete();
     }
 }

@@ -21,7 +21,7 @@ class ProductService
         $this->mediaService = $mediaService;
     }
 
-    public function getAllProducts($sortBy = 'created_at', $direction = 'desc', $status = 'active')
+    public function getAllProducts($sortBy = 'created_at', $direction = 'desc', $status)
     {
         return $this->productRepository->getAllProducts($sortBy, $direction, $status);
     }
@@ -122,6 +122,78 @@ class ProductService
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
+            throw $e;
+        }
+    }
+
+    public function findById($id)
+    {
+        return $this->productRepository->findById($id);
+    }
+
+    public function update($id, array $data, $thumbnail = null, $images = [])
+    {
+        try {
+            DB::beginTransaction();
+
+            // Generate slug
+            $data['slug'] = Str::slug($data['name']);
+
+            // Update product
+            $product = $this->productRepository->update($id, [
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'price' => $data['price'],
+                'description' => $data['description'] ?? null,
+                'status' => $data['status'] ?? 'active'
+            ]);
+
+            // Handle thumbnail (replace if new uploaded)
+            if ($thumbnail) {
+                // Get current product data to get old thumbnail_id
+                $currentProduct = $this->productRepository->findById($id);
+                
+                // Delete old thumbnail if exists
+                if ($currentProduct && $currentProduct->thumbnail_id) {
+                    $this->mediaService->deleteImage($currentProduct->thumbnail_id);
+                }
+
+                // Upload new thumbnail
+                $thumbnailMedia = $this->mediaService->uploadImage(
+                    $thumbnail,
+                    'product',
+                    $product->id,
+                    true
+                );
+                
+                // Update product with new thumbnail_id
+                $this->productRepository->update($product->id, [
+                    'thumbnail_id' => $thumbnailMedia->id
+                ]);
+            }
+
+            // Handle multiple images (add new)
+            if (!empty($images)) {
+                foreach ($images as $image) {
+                    $this->mediaService->uploadImage(
+                        $image,
+                        'product',
+                        $product->id,
+                        false
+                    );
+                }
+            }
+
+            // Update attributes
+            if (isset($data['attributes'])) {
+                $this->productRepository->deleteAttributes($product->id); // hapus lama
+                $this->productRepository->syncAttributes($product->id, $data['attributes']);
+            }
+
+            DB::commit();
+            return $product;
+        } catch (\Exception $e) {
+            DB::rollBack();
             throw $e;
         }
     }

@@ -45,7 +45,7 @@ class HomeController extends Controller
         $this->articleService = $articleService;
 
         // Inisialisasi data utama
-        $this->products = $this->productService->getAllProducts('created_at', 'desc', 'active');
+        $this->products = $this->productService->getAllProducts('updated_at', 'desc', 'active');
         $this->settings = $this->settingService->getSettings();
         $this->services = $this->serviceService->getServices('active');
         $this->portofolios = $this->portofolioService->getPortofolios('active');

@@ -30,10 +30,10 @@
                     ['key' => 'created_at', 'label' => 'Tanggal Dibuat', 'type' => 'date'],
                 ]"
                 :has-actions="true"
-                route-prefix="products"
+                route-prefix="kavling"
                 :searchable="true"
                 :search-fields="['name']"
-                default-sort="name"
+                default-sort=""
                 :default-per-page="10"
             >
             </x-data-table>
@@ -75,6 +75,7 @@ document.addEventListener('alpine:init', () => {
                 );
             }
             filtered = filtered.sort((a, b) => {
+                if (!this.sortColumn) return 0; // Tidak sort jika sortColumn kosong
                 let modifier = this.sortAsc ? 1 : -1;
                 let aVal = a[this.sortColumn];
                 let bVal = b[this.sortColumn];
@@ -125,7 +126,6 @@ document.addEventListener('alpine:init', () => {
         },
 
         formatColumnValue(item, column) {
-            console.log('item:', item); 
             const value = item[column.key];
             switch (column.type) {
                 case 'index':

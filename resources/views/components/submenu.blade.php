@@ -99,7 +99,7 @@
                         ></a>
                     </div>
 
-                    <p class="mt-4 text-sm text-gray-700 whitespace-pre-line" x-text="$store.productDetail.product.description"></p>
+                    <p class="mt-4 text-sm text-gray-700 whitespace-pre-line" x-html="$store.productDetail.product.description"></p>
 
                     
                 </div>
@@ -150,7 +150,7 @@
                 <!-- Kanan: Deskripsi -->
                 <div class="w-full md:w-1/3 p-4 md:pl-0 md:pr-6 md:py-5 max-h-[32rem] overflow-y-auto">
                     <h2 class="text-xl font-bold text-gray-900 mb-4" x-text="$store.portofolioDetail.portofolio.name"></h2>
-                    <p class="text-gray-700" x-text="$store.portofolioDetail.portofolio.description"></p>
+                    <p class="text-gray-700" x-html="$store.portofolioDetail.portofolio.description"></p>
                     <a 
                         :href="'https://wa.me/' + @js($settings['whatsapp'])"
                         target="_blank"
