@@ -3,9 +3,74 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProductRepository
 {
+    protected $table = 'products';
+    protected $attributeTable = 'product_attribute_values';
+
+    public function create(array $data)
+    {
+        // Get kavling category id
+        $kavlingCategory = DB::table('product_categories')
+            ->where('slug', 'kavling')
+            ->where('status', 'active')
+            ->first();
+
+        if (!$kavlingCategory) {
+            throw new \Exception('Kavling category not found');
+        }
+
+        $data['id'] = Str::uuid();
+        $data['category_id'] = $kavlingCategory->id;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        DB::table($this->table)->insert($data);
+        return DB::table($this->table)->where('id', $data['id'])->first();
+    }
+
+    public function update($id, array $data)
+    {
+        $data['updated_at'] = now();
+        
+        DB::table($this->table)
+            ->where('id', $id)
+            ->update($data);
+
+        return DB::table($this->table)->where('id', $id)->first();
+    }
+
+    public function syncAttributes($productId, array $attributes)
+    {
+        // Get all attributes for kavling category
+        $kavlingAttributes = DB::table('product_attributes')
+            ->join('product_categories', 'product_attributes.category_id', '=', 'product_categories.id')
+            ->where('product_categories.slug', 'kavling')
+            ->where('product_attributes.status', 'active')
+            ->pluck('product_attributes.id', 'product_attributes.slug')
+            ->toArray();
+
+        foreach ($attributes as $key => $value) {
+            // Get attribute ID based on slug
+            $attributeId = $kavlingAttributes[$key] ?? null;
+            
+            if (!$attributeId) {
+                throw new \Exception("Attribute with slug '{$key}' not found");
+            }
+
+            DB::table($this->attributeTable)->insert([
+                'id' => Str::uuid(),
+                'product_id' => $productId,
+                'attribute_id' => $attributeId,
+                'value' => $value,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+    }
+
     public function getAllProducts($sortBy = 'created_at', $direction = 'desc', $status = 'active')
     {
         // Ambil produk beserta kategori

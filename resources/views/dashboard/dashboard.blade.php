@@ -1,5 +1,9 @@
-<x-app-layout>
-    <div class="px-4 sm:px-6 lg:px-8">
+@extends('layouts.app')
+
+@section('title', 'Dashboard')
+
+@section('content')
+    <div class="">
         <x-breadcrumb />
 
         <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -24,4 +28,4 @@
             <!-- Add more stat cards as needed -->
         </div>
     </div>
-</x-app-layout>
+@endsection

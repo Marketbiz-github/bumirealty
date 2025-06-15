@@ -74,7 +74,7 @@
                                     Rp. <span x-text="Number(product.price).toLocaleString('id-ID')"></span>
                                     <template x-if="product.attributes.find(a => a.attribute_slug === 'luas-tanah')">
                                         <span class="ml-2 text-xs text-[#1E605C] font-bold">
-                                            / <span x-text="product.attributes.find(a => a.attribute_slug === 'luas-tanah').value"></span> m<sup>2</sup>
+                                            / <span x-text="product.attributes.find(a => a.attribute_slug === 'luas-tanah').value"></span> 
                                         </span>
                                     </template>
                                 </p>

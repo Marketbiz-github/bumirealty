@@ -55,7 +55,6 @@
                             <span class="ml-2 text-teal-700 text-sm">
                                 / 
                                 <span x-text="$store.productDetail.product.attributes.find(a => a.attribute_slug === 'luas-tanah').value"></span>
-                                m<sup>2</sup>
                             </span>
                         </template>
                     </p>

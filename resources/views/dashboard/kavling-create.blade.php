@@ -1,0 +1,325 @@
+@extends('layouts.app')
+
+@section('title', 'Create Kavling')
+
+@section('content')
+<div class="">
+    <x-breadcrumb :items="[
+        ['label' => 'Kavling', 'url' => route('products.index')],
+        ['label' => 'Create']
+    ]" />
+
+    <div class="mt-8">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+
+            <!-- Kavling Information -->
+            <div class="bg-white rounded-lg shadow p-6 space-y-5">
+                <h2 class="text-lg font-medium text-gray-900">Kavling Information</h2>
+                
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <x-input-label for="name" value="Nama" />
+                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
+                            :value="old('name')" required />
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <x-input-label for="price" value="Harga" />
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">Rp</span>
+                            </div>
+                            <x-text-input id="price" name="price" type="number" class="block w-full pl-12" 
+                                :value="old('price')" required />
+                        </div>
+                        <x-input-error :messages="$errors->get('price')" class="mt-2" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="luas" value="Luas Tanah" />
+                        <x-text-input id="luas" name="attributes[luas-tanah]" type="text" class="mt-1 block w-full" 
+                            :value="old('attributes.luas-tanah')" required />
+                    </div>
+
+                    <div>
+                        <x-input-label for="lokasi" value="Lokasi" />
+                        <x-text-input id="lokasi" name="attributes[lokasi]" type="text" class="mt-1 block w-full" 
+                            :value="old('attributes.lokasi')" required />
+                    </div>
+
+                    <div>
+                        <x-input-label for="gmaps" value="Google Maps URL" />
+                        <x-text-input id="gmaps" name="attributes[gmaps-url]" type="url" class="mt-1 block w-full" 
+                            :value="old('attributes.gmaps-url')" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 space-y-2">
+                    <x-input-label for="description" value="Deskripsi" />
+                    <textarea id="description" name="description" class="hidden">{{ old('description') }}</textarea>
+                    <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                </div>
+
+                <div class="grid grid-cols-1 space-y-2">
+                    <x-input-label for="thumbnail" value="Thumbnail Image *" />
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center w-full">
+                            <label for="thumbnail-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Upload Thumbnail</span></p>
+                                    <p class="text-xs text-gray-500">PNG, JPG up to 1MB</p>
+                                </div>
+                            </label>
+                            <input 
+                                id="thumbnail-upload" 
+                                type="file" 
+                                name="thumbnail" 
+                                accept="image/png, image/jpeg"
+                                required
+                                style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
+                                aria-label="Upload thumbnail image"
+                            />
+                        </div>
+                        <x-input-error :messages="$errors->get('thumbnail')" class="mt-2" />
+                        <!-- Thumbnail Preview -->
+                        <div id="thumbnail-preview" class="hidden">
+                            <div class="relative w-40 h-40 rounded-lg overflow-hidden bg-gray-100">
+                                <img src="" class="w-full h-full object-cover" />
+                                <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 hover:opacity-100 transition-all flex items-center justify-center">
+                                    <button type="button" id="remove-thumbnail" class="p-2 bg-red-500 rounded-full text-white hover:bg-red-600 focus:outline-none">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 space-y-2">
+                    <x-input-label for="image" value="Images * (Min. 1 Required)" />
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center w-full">
+                            <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Upload Images</span> (Required)</p>
+                                    <p class="text-xs text-gray-500">PNG, JPG up to 2MB each (Max 5 images)</p>
+                                </div>
+                            </label>
+                            <input 
+                                id="image-upload" 
+                                type="file" 
+                                name="images[]" 
+                                multiple 
+                                accept="image/png, image/jpeg"
+                                required
+                                style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
+                                aria-label="Upload additional images"
+                            />
+                        </div>
+                        <x-input-error :messages="$errors->get('images')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
+
+                        <!-- Image Preview Grid -->
+                        <div id="image-preview" class="grid grid-cols-2 gap-4 md:grid-cols-5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <x-secondary-button onclick="history.back()">Cancel</x-secondary-button>
+                <x-primary-button>Save</x-primary-button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+
+<script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
+<script>
+    tinymce.init({
+        selector: '#description',
+        height: 300,
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+        ]
+    });
+
+    // Image preview
+    const imageUpload = document.getElementById('image-upload');
+    const imagePreview = document.getElementById('image-preview');
+    const maxImages = 5;
+    let currentImages = 0;
+
+    imageUpload.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        const remainingSlots = maxImages - currentImages;
+        
+        if (files.length === 0) {
+            alert('Please select at least one image');
+            return;
+        }
+        
+        if (currentImages + files.length > maxImages) {
+            alert(`You can only upload ${remainingSlots} more image${remainingSlots !== 1 ? 's' : ''}`);
+            return;
+        }
+
+        let hasErrors = false;
+        files.forEach(file => {
+            // Validate file type
+            if (!file.type.match('image/png') && !file.type.match('image/jpeg')) {
+                alert(`File "${file.name}" is not a valid image type. Only PNG and JPEG are allowed.`);
+                hasErrors = true;
+                return;
+            }
+
+            // Validate file size (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert(`File "${file.name}" exceeds 2MB size limit.`);
+                hasErrors = true;
+                return;
+            }
+        });
+
+        if (hasErrors) {
+            e.target.value = ''; // Clear the input
+            return;
+        }
+
+        // Process valid files
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative group aspect-square rounded-lg overflow-hidden bg-gray-100'; 
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 hover:opacity-100 transition-all flex items-center justify-center">
+                        <button type="button" class="p-2 bg-red-500 rounded-full text-white hover:bg-red-600 focus:outline-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="hidden" name="image_order[]" value="${currentImages}">
+                `;
+
+                // Add delete functionality
+                wrapper.querySelector('button').addEventListener('click', function() {
+                    wrapper.remove();
+                    currentImages--;
+                    updateImageOrder();
+                });
+
+                imagePreview.appendChild(wrapper);
+                currentImages++;
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Update image order when images are deleted
+    function updateImageOrder() {
+        const inputs = imagePreview.querySelectorAll('input[name="image_order[]"]');
+        inputs.forEach((input, index) => {
+            input.value = index;
+        });
+    }
+
+    // Thumbnail preview
+    const thumbnailUpload = document.getElementById('thumbnail-upload');
+    const thumbnailPreview = document.getElementById('thumbnail-preview');
+    const removeThumbnailBtn = document.getElementById('remove-thumbnail');
+
+    thumbnailUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+
+        // Validate file type
+        if (file && !file.type.match('image/png') && !file.type.match('image/jpeg')) {
+            alert('Only PNG and JPEG files are allowed');
+            return;
+        }
+
+        // Validate file size (1MB)
+        if (file && file.size > 1 * 1024 * 1024) {
+            alert('File size should not exceed 1MB');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            thumbnailPreview.querySelector('img').src = e.target.result;
+            thumbnailPreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Remove thumbnail
+    if (removeThumbnailBtn) {
+        removeThumbnailBtn.addEventListener('click', function() {
+            thumbnailPreview.querySelector('img').src = '';
+            thumbnailPreview.classList.add('hidden');
+            thumbnailUpload.value = '';
+        });
+    }
+
+    // Form submit event
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Check thumbnail
+        const thumbnailFile = document.getElementById('thumbnail-upload').files[0];
+        if (!thumbnailFile) {
+            document.getElementById('thumbnail-upload').focus();
+            alert('Please select a thumbnail image');
+            return;
+        }
+
+        // Check description
+        const description = tinymce.get('description').getContent();
+        if (!description) {
+            alert('Please fill in the description');
+            return;
+        }
+        
+        // Check additional images
+        const imageContainer = document.getElementById('image-preview');
+        const imageCount = imageContainer.children.length;
+        
+        if (imageCount === 0) {
+            document.getElementById('image-upload').focus();
+            alert('Please upload at least one additional image');
+            return;
+        }
+
+        // Check total images count
+        if (imageCount > maxImages) {
+            alert(`Maximum ${maxImages} images allowed`);
+            return;
+        }
+        
+        // If all validation passes, submit the form
+        this.submit();
+    });
+</script>
+@endsection

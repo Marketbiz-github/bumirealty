@@ -3,28 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\ProductRepository;
+use App\Services\ProductService;
+use App\Services\SettingService;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    protected $productRepository;
+    protected $productService;
+    protected $settingService;
 
-    public function __construct(ProductRepository $productRepository)
-    {
-        $this->productRepository = $productRepository;
+    protected $settings;
+
+    public function __construct(
+        ProductService $productService,
+        SettingService $settingService,
+    ) {
+        $this->productService = $productService;
+        $this->settingService = $settingService;
+
+        // Inisialisasi data utama
+        $this->settings = $this->settingService->getSettings();
     }
-
-    /**
-     * Display a listing of the products.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $products = $this->productRepository->getAllProducts('updated_at', 'desc');
-
-        dd($products); // Debugging line to check the products data
-        return view('products.index', compact('products'));
+        return view('dashboard.kavling', [
+            'products' => $this->productService->getAllProducts('created_at', 'desc', 'active'),
+            'settings' => $this->settings,
+        ]);
     }
 
     /**
@@ -34,7 +39,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        return view('dashboard.kavling-create', [
+            'settings' => $this->settings,
+        ]);
     }
 
     /**
@@ -45,10 +52,49 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation and storage logic here
-        
-        return redirect()->route('products.index')
-            ->with('success', 'Product created successfully.');
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'description' => 'nullable',
+                'thumbnail' => 'required|image|mimes:jpeg,png|max:1024',
+                'images' => 'required|array|min:1|max:5',
+                'images.*' => 'image|mimes:jpeg,png|max:2048',
+                'attributes.luas-tanah' => 'required',
+                'attributes.lokasi' => 'required',
+                'attributes.gmaps-url' => 'nullable|url',
+            ]);
+
+            Log::info('Product data', $validated);
+
+            $product = $this->productService->store(
+                $validated,
+                $request->file('thumbnail'),
+                $request->file('images')
+            );
+
+            Log::info('Product created successfully', ['product_id' => $product->id]);
+
+            return redirect()
+                ->route('products.index')
+                ->with('success', 'Kavling berhasil ditambahkan.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::warning('Product validation failed', [
+                'errors' => $e->errors()
+            ]);
+            throw $e;
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create product', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Gagal menambahkan kavling. ' . $e->getMessage());
+        }
     }
 
     /**
