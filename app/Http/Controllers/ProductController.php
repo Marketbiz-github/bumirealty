@@ -113,13 +113,15 @@ class ProductController extends Controller
                 'attributes.gmaps-url' => 'nullable|url',
             ]);
 
-            // dd($request->all(), $validated, $request->file('thumbnail'), $request->file('images'));
+            // dd($request->all(), $validated, $request->file('thumbnail'), $request->file('images'), $request->input('remove_images', []));
+            $images = $request->file('images');
 
             $this->productService->update(
                 $id,
                 $validated,
                 $request->file('thumbnail'),
-                $request->file('images')
+                $images,
+                $request->input('remove_images', []) // ambil array id gambar yang dihapus
             );
 
             return redirect()

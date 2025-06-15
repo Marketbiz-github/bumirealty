@@ -11,6 +11,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <link rel="stylesheet" href="{{ asset('css/font.css') }}">
         <link rel="icon" type="image/png" href="{{ asset($settings['favicon'] ?? '/images/contents/favicon.ico') }}">
+        <!-- Font Awesome CDN v6 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
         <style>
             body {
                 font-family: 'Poppins', Arial, sans-serif;
@@ -30,27 +33,7 @@
                     </div>
 
                     <!-- Flash Messages -->
-                    @if(session('success'))
-                        <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-4">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="bg-red-100 text-red-800 p-4 rounded-lg mb-4">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    @if(session('warning'))
-                        <div class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mb-4">
-                            {{ session('warning') }}
-                        </div>
-                    @endif
-                    @if(session('info'))
-                        <div class="bg-blue-100 text-blue-800 p-4 rounded-lg mb-4">
-                            {{ session('info') }}
-                        </div>
-                    @endif
+                    <x-toast-messages />
                 </main>
             </div>
         </div>

@@ -3,26 +3,32 @@ $menuItems = [
     [
         'label' => 'Dashboard',
         'route' => 'dashboard',
-        'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                  </svg>'
+        'icon' => '<i class="fas fa-home w-5 h-5"></i>',
     ],
     [
         'label' => 'Kavling',
-        'route' => 'dashboard',
-        'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                  </svg>'
+        'route' => 'products.index',
+        'icon' => '<i class="fas fa-th-large w-5 h-5"></i>',
     ],
     [
-        'label' => 'Gallery',
-        'route' => 'dashboard',
-        'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M3.75 3.75h16.5a.75.75 0 01.75.75v16.5a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V4.5c0-.414.336-.75.75-.75z"/>
-                  </svg>'
+        'label' => 'Layanan',
+        'route' => 'service.index',
+        'icon' => '<i class="fas fa-concierge-bell w-5 h-5"></i>',
+    ],
+    [
+        'label' => 'Testimoni',
+        'route' => 'testimonial.index',
+        'icon' => '<i class="fas fa-comment-dots w-5 h-5"></i>',
+    ],
+    [
+        'label' => 'Portofolio',
+        'route' => 'portofolio.index',
+        'icon' => '<i class="fas fa-briefcase w-5 h-5"></i>',
+    ],
+    [
+        'label' => 'Galeri',
+        'route' => 'gallery.index',
+        'icon' => '<i class="fas fa-images w-5 h-5"></i>',
     ],
 ];
 @endphp
@@ -60,7 +66,8 @@ $menuItems = [
             <nav class="px-4 py-2 space-y-2">
                 @foreach($menuItems as $item)
                     <a href="{{ route($item['route']) }}" 
-                       class="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-150 {{ request()->routeIs($item['route']) ? 'hover:bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-200' }}">
+                       class="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-150
+                       {{ request()->routeIs($item['route']) ? 'bg-gray-200 text-teal-800' : 'text-gray-600 hover:bg-gray-200' }}">
                         {!! $item['icon'] !!}
                         <span class="ml-3">{{ $item['label'] }}</span>
                     </a>
@@ -116,7 +123,8 @@ $menuItems = [
         <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
             @foreach($menuItems as $item)
                 <a href="{{ route($item['route']) }}" 
-                   class="flex items-center px-4 py-3 rounded-lg transition-colors duration-150 {{ request()->routeIs($item['route']) ? ' hover:bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-200' }}">
+                   class="flex items-center px-4 py-3 rounded-lg transition-colors duration-150
+                   {{ request()->routeIs($item['route']) ? 'bg-gray-200 text-teal-800' : 'text-gray-600 hover:bg-gray-200' }}">
                     {!! $item['icon'] !!}
                     <span class="ml-3 text-sm font-medium">{{ $item['label'] }}</span>
                 </a>

@@ -10,7 +10,7 @@
     ]" />
 
     <div class="mt-8">
-        <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form id="form" action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -160,7 +160,6 @@
                                                 </svg>
                                             </button>
                                         </div>
-                                        <input type="hidden" name="old_images[]" value="{{ $media->id }}">
                                     </div>
                                 @endif
                             @endforeach
@@ -358,6 +357,12 @@
         btn.addEventListener('click', function() {
             const wrapper = btn.closest('[data-media-id]');
             if (wrapper) {
+                const mediaId = wrapper.getAttribute('data-media-id');
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'remove_images[]';
+                input.value = mediaId;
+                document.querySelector('#form').appendChild(input);
                 wrapper.remove();
             }
         });

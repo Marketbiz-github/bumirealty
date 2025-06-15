@@ -131,7 +131,7 @@ class ProductService
         return $this->productRepository->findById($id);
     }
 
-    public function update($id, array $data, $thumbnail = null, $images = [])
+    public function update($id, array $data, $thumbnail = null, $images = [], $removeImages = [])
     {
         try {
             DB::beginTransaction();
@@ -181,6 +181,13 @@ class ProductService
                         $product->id,
                         false
                     );
+                }
+            }
+
+            // Hapus gambar lama yang dipilih user
+            if (!empty($removeImages)) {
+                foreach ($removeImages as $mediaId) {
+                    $this->mediaService->deleteImage($mediaId);
                 }
             }
 
