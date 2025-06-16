@@ -8,7 +8,7 @@ class ArticleRepository
 {
     public function getLatestArticles($perPage = 4)
     {
-        $response = Http::get('https://marketbiz.net/wp-json/wp/v2/posts', [
+        $response = Http::get('http://artikel.bumirealty.id/wp-json/wp/v2/posts', [
             'per_page' => $perPage,
             '_embed' => true
         ]);

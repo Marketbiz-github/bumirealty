@@ -131,6 +131,6 @@ class HomeController extends Controller
 
     public function showArticles()
     {
-        return redirect()->away('https://marketbiz.net');
+        return redirect()->away('http://artikel.bumirealty.id/');
     }
 }
