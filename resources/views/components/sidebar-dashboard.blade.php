@@ -67,7 +67,7 @@ $menuItems = [
                 @foreach($menuItems as $item)
                     <a href="{{ route($item['route']) }}" 
                        class="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-150
-                       {{ request()->routeIs($item['route']) ? 'bg-gray-200 text-teal-800' : 'text-gray-600 hover:bg-gray-200' }}">
+                        {{ request()->routeIs($item['route'] . '*') ? 'bg-gray-200 text-teal-800' : 'text-gray-600 hover:bg-gray-200' }}">
                         {!! $item['icon'] !!}
                         <span class="ml-3">{{ $item['label'] }}</span>
                     </a>
@@ -125,7 +125,7 @@ $menuItems = [
             @foreach($menuItems as $item)
                 <a href="{{ route($item['route']) }}" 
                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-150
-                   {{ request()->routeIs($item['route']) ? 'bg-gray-200 text-teal-800' : 'text-gray-600 hover:bg-gray-200' }}">
+                    {{ request()->routeIs($item['route'] . '*') ? 'bg-gray-200 text-teal-800' : 'text-gray-600 hover:bg-gray-200' }}">
                     {!! $item['icon'] !!}
                     <span class="ml-3 text-sm font-medium">{{ $item['label'] }}</span>
                 </a>

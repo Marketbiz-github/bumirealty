@@ -103,6 +103,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'status' => 'required|in:active,inactive',
@@ -115,24 +116,29 @@ class ProductController extends Controller
                 'attributes.luas-tanah' => 'required',
                 'attributes.lokasi' => 'required',
                 'attributes.gmaps-url' => 'nullable|url',
+                'remove_images' => 'nullable|array', // Add validation for removed images
+                'image_order' => 'nullable|array'
             ]);
 
-            // dd($request->all(), $validated, $request->file('thumbnail'), $request->file('images'), $request->input('remove_images', []));
-            $images = $request->file('images');
+            // Get ordered images
+            $orderedImages = [];
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $orderedImages[] = $image;
+                }
+            }
 
             $this->productService->update(
                 $id,
                 $validated,
                 $request->file('thumbnail'),
-                $images,
-                $request->input('remove_images', []) // ambil array id gambar yang dihapus
+                $orderedImages,
+                $request->input('remove_images', []) // Get array of image IDs to remove
             );
 
             return redirect()
                 ->route('products.index')
                 ->with('success', 'Kavling berhasil diupdate.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            throw $e;
         } catch (\Exception $e) {
             return back()
                 ->withInput()
