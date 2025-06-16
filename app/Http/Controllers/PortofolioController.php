@@ -86,6 +86,7 @@ class PortofolioController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -94,16 +95,27 @@ class PortofolioController extends Controller
                 'images' => 'nullable|array|max:5',
                 'images.*' => 'image|mimes:jpeg,png|max:2048',
                 'status' => 'required|in:active,inactive',
-                'deleted_images' => 'nullable|array',
-                'deleted_images.*' => 'string'
+                'deleted_images' => 'nullable',
+                'image_order' => 'nullable|array'
             ]);
+
+            // Parse deleted images from JSON if present
+            $deletedImages = $request->deleted_images ? json_decode($request->deleted_images, true) : [];
+
+            // Get the ordered images array
+            $orderedImages = [];
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $orderedImages[] = $image;
+                }
+            }
 
             $portofolio = $this->portofolioService->update(
                 $id,
                 $validated,
                 $request->file('thumbnail'),
-                $request->file('images') ?? [],
-                $request->input('deleted_images', [])
+                $orderedImages,
+                $deletedImages
             );
 
             return redirect()

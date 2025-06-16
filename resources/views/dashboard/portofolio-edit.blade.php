@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="">
-    <x-breadcrumb :items="[
+    <x-breadcrumb :items=" [
         ['label' => 'Portofolio', 'url' => route('portofolio.index')],
         ['label' => 'Edit']
     ]" />
@@ -13,18 +13,33 @@
         <form action="{{ route('portofolio.update', $portofolio->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
-            <input type="hidden" name="deleted_images" id="deleted-images" value="">
+            <input type="hidden" name="deleted_images" id="deleted-images">
 
             <div class="bg-white rounded-lg shadow p-6 space-y-5">
                 <h2 class="text-lg font-medium text-gray-900">Portofolio Information</h2>
                 
-                <!-- Name -->
-                <div>
-                    <x-input-label for="name" value="Name *" />
-                    <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
-                        :value="old('name', $portofolio->name)" required />
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 space-y-2 gap-4">
+                    <!-- Name -->
+                    <div>
+                        <x-input-label for="name" value="Name *" />
+                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
+                            :value="old('name', $portofolio->name)" required />
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    </div>
+
+                    <!-- Status -->
+                    <div class="flex items-center space-x-2">
+                        <x-input-label for="status" value="Status" class="mb-0" />
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="hidden" name="status" value="inactive">
+                            <input type="checkbox" id="status" name="status" value="active" 
+                                {{ old('status', $portofolio->status) === 'active' ? 'checked' : '' }}
+                                class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-teal-500 rounded-full peer peer-checked:bg-teal-600"></div>
+                            <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white border border-gray-300 rounded-full transition-transform duration-300 peer-checked:translate-x-full"></div>
+                        </label>
+                    </div>
+                 </div>
 
                 <!-- Description -->
                 <div class="grid grid-cols-1 space-y-2">
@@ -107,18 +122,6 @@
                     </div>
                 </div>
 
-                <!-- Status -->
-                <div class="flex items-center space-x-2">
-                    <x-input-label for="status" value="Status" class="mb-0" />
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="hidden" name="status" value="inactive">
-                        <input type="checkbox" id="status" name="status" value="active" 
-                            {{ old('status', $portofolio->status) === 'active' ? 'checked' : '' }}
-                            class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-teal-500 rounded-full peer peer-checked:bg-teal-600"></div>
-                        <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white border border-gray-300 rounded-full transition-transform duration-300 peer-checked:translate-x-full"></div>
-                    </label>
-                </div>
             </div>
 
             <div class="flex justify-end space-x-3">
@@ -134,10 +137,6 @@
 <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    let deletedImages = [];
-    let currentImages = {{ count($portofolio->images) }};
-    const maxImages = 5;
-
     // TinyMCE Init
     tinymce.init({
         selector: '#description',
@@ -146,13 +145,21 @@ document.addEventListener('DOMContentLoaded', function() {
         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist'
     });
 
+    let deletedImages = [];
+    let currentImages = {{ count($portofolio->images) }};
+    const maxImages = 5;
+    let uploadedFiles = new Set(); // Track unique files
+
     // Handle existing image deletion
     document.querySelectorAll('.delete-image').forEach(btn => {
         btn.addEventListener('click', function() {
             const wrapper = this.closest('[data-media-id]');
             const mediaId = wrapper.dataset.mediaId;
             deletedImages.push(mediaId);
+            
+            // Update the hidden input with JSON string of deleted image IDs
             document.getElementById('deleted-images').value = JSON.stringify(deletedImages);
+
             wrapper.remove();
             currentImages--;
         });
@@ -169,16 +176,35 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        files.forEach(file => {
+        files.forEach((file, index) => {
+            // Check if file is already uploaded
+            const fileId = `${file.name}-${file.size}`;
+            if (uploadedFiles.has(fileId)) {
+                return; // Skip duplicate file
+            }
+            uploadedFiles.add(fileId);
+
             if (file.size > 2 * 1024 * 1024) {
-                alert('Image size should not exceed 2MB');
+                alert(`File "${file.name}" exceeds 2MB size limit`);
                 return;
             }
 
+            // Create new file input for each image
+            const newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = `images[]`;
+            newInput.style.display = 'none';
+            
+            // Create a new File object from the original file
+            const container = new DataTransfer();
+            container.items.add(file);
+            newInput.files = container.files;
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'relative group aspect-square rounded-lg overflow-hidden bg-gray-100';
+                wrapper.dataset.fileId = fileId; // Add file identifier to wrapper
                 wrapper.innerHTML = `
                     <img src="${e.target.result}" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
@@ -188,11 +214,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             </svg>
                         </button>
                     </div>
+                    <input type="hidden" name="image_order[]" value="${currentImages}">
                 `;
-
+                
+                wrapper.appendChild(newInput);
+                
                 wrapper.querySelector('button').onclick = () => {
+                    uploadedFiles.delete(fileId); // Remove from tracking Set
                     wrapper.remove();
                     currentImages--;
+                    updateImageOrder();
                 };
 
                 imagePreview.appendChild(wrapper);
@@ -200,7 +231,18 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             reader.readAsDataURL(file);
         });
+
+        // Clear input to allow selecting same files again
+        this.value = '';
     });
+
+    // Update image order function
+    function updateImageOrder() {
+        const inputs = imagePreview.querySelectorAll('input[name="image_order[]"]');
+        inputs.forEach((input, index) => {
+            input.value = index;
+        });
+    }
 
     // Thumbnail handlers
     const thumbnailUpload = document.getElementById('thumbnail-upload');
