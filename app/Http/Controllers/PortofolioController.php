@@ -37,7 +37,7 @@ class PortofolioController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -45,12 +45,19 @@ class PortofolioController extends Controller
                 'thumbnail' => 'required|image|mimes:jpeg,png|max:1024',
                 'images' => 'required|array|min:1|max:5',
                 'images.*' => 'image|mimes:jpeg,png|max:2048',
+                'image_order' => 'required|array'
             ]);
+
+            // Get the ordered images array
+            $orderedImages = [];
+            foreach ($request->file('images') as $image) {
+                $orderedImages[] = $image;
+            }
 
             $portofolio = $this->portofolioService->store(
                 $validated,
                 $request->file('thumbnail'),
-                $request->file('images')
+                $orderedImages
             );
 
             return redirect()

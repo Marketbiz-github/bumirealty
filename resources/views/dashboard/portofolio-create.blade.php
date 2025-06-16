@@ -68,7 +68,7 @@
 
                 <!-- Additional Images -->
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="image" value="Additional Images * (Min. 1 Required)" />
+                    <x-input-label for="images" value="Additional Images * (Min. 1 Required)" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
@@ -113,13 +113,12 @@ document.addEventListener('DOMContentLoaded', function() {
         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist'
     });
 
-    // Image preview and validation code
     const imageUpload = document.getElementById('image-upload');
     const imagePreview = document.getElementById('image-preview');
     const maxImages = 5;
     let currentImages = 0;
+    let uploadedFiles = new Set(); // Track unique files
 
-    // Image Upload Handler with FormData tracking
     imageUpload?.addEventListener('change', function(e) {
         const files = Array.from(e.target.files);
         if (files.length + currentImages > maxImages) {
@@ -128,16 +127,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         files.forEach((file, index) => {
+            // Check if file is already uploaded (using name + size as unique identifier)
+            const fileId = `${file.name}-${file.size}`;
+            if (uploadedFiles.has(fileId)) {
+                return; // Skip duplicate file
+            }
+            uploadedFiles.add(fileId);
+
             if (file.size > 2 * 1024 * 1024) {
                 alert(`File "${file.name}" exceeds 2MB size limit`);
                 return;
             }
 
+            // Create new file input for each image
+            const newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = `images[]`;
+            newInput.style.display = 'none';
+            
+            // Create a new File object from the original file
+            const container = new DataTransfer();
+            container.items.add(file);
+            newInput.files = container.files;
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'relative group aspect-square rounded-lg overflow-hidden bg-gray-100';
-                wrapper.dataset.fileIndex = index; // Track file index
+                wrapper.dataset.fileId = fileId; // Add file identifier to wrapper
                 wrapper.innerHTML = `
                     <img src="${e.target.result}" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
@@ -149,9 +166,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <input type="hidden" name="image_order[]" value="${currentImages}">
                 `;
-
-                // Add delete functionality
+                
+                wrapper.appendChild(newInput);
+                
                 wrapper.querySelector('button').onclick = () => {
+                    uploadedFiles.delete(fileId); // Remove from tracking Set
                     wrapper.remove();
                     currentImages--;
                     updateImageOrder();
@@ -162,6 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             reader.readAsDataURL(file);
         });
+
+        // Clear the input to allow selecting the same file again if needed
+        this.value = '';
     });
 
     // Update image order
