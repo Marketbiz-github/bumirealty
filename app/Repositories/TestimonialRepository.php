@@ -60,4 +60,15 @@ class TestimonialRepository
                 'updated_at' => now(),
             ]);
     }
+
+    public function getTotalCount($status = 'active')
+    {
+        $query = DB::table($this->table);
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->count();
+    }
 }

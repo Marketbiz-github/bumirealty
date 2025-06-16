@@ -139,7 +139,7 @@
                                 <img :src="service.icon" alt="" class="w-8 h-8 object-contain">
                             </div>
                             <h3 class="text-xl font-semibold text-gray-900 mb-4" x-text="service.title ?? '-'"></h3>
-                            <p class="text-gray-600 mb-4" x-text="service.description ?? '-'"></p>
+                            <p class="text-gray-600 mb-4" x-html="service.description ?? '-'"></p>
                         </div>
                     </template>
                 </div>

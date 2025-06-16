@@ -46,4 +46,16 @@ class GalleryRepository
             ->where('id', $id)
             ->first();
     }
+
+    public function getTotalCount($status = 'active')
+    {
+        $query = DB::table($this->table)
+            ->where('usage_type', 'gallery');
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->count();
+    }
 }

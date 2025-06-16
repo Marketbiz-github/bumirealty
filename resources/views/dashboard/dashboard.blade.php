@@ -3,29 +3,84 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="">
-        <x-breadcrumb />
+<div class="">
+    <x-breadcrumb />
 
-        <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <!-- Stats Card -->
-            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
-                <div class="p-6">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-teal-50">
-                            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                            </svg>
-                        </div>
-                        <div class="ml-5">
-                            <h3 class="text-lg font-medium text-gray-900">Total Properties</h3>
-                            <p class="mt-1 text-3xl font-semibold text-gray-700">12</p>
-                        </div>
+    <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Kavling Stats -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-teal-50">
+                        <i class="fas fa-home w-6 h-6 text-teal-600"></i>
+                    </div>
+                    <div class="ml-5">
+                        <h3 class="font-medium text-gray-900">Total Kavling</h3>
+                        <p class="mt-1 text-3xl font-semibold text-gray-700">{{ $stats['products'] }}</p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Add more stat cards as needed -->
+        <!-- Layanan Stats -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-50">
+                        <i class="fas fa-handshake w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <div class="ml-5">
+                        <h3 class="font-medium text-gray-900">Total Layanan</h3>
+                        <p class="mt-1 text-3xl font-semibold text-gray-700">{{ $stats['services'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial Stats -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-50">
+                        <i class="fas fa-star w-6 h-6 text-yellow-600"></i>
+                    </div>
+                    <div class="ml-5">
+                        <h3 class="font-medium text-gray-900">Total Testimonial</h3>
+                        <p class="mt-1 text-3xl font-semibold text-gray-700">{{ $stats['testimonials'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portofolio Stats -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-50">
+                        <i class="fas fa-briefcase w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <div class="ml-5">
+                        <h3 class="font-medium text-gray-900">Total Portofolio</h3>
+                        <p class="mt-1 text-3xl font-semibold text-gray-700">{{ $stats['portofolios'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Stats -->
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-pink-50">
+                        <i class="fas fa-images w-6 h-6 text-pink-600"></i>
+                    </div>
+                    <div class="ml-5">
+                        <h3 class="font-medium text-gray-900">Total Gallery</h3>
+                        <p class="mt-1 text-3xl font-semibold text-gray-700">{{ $stats['galleries'] }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 @endsection

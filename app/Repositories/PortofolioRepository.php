@@ -58,4 +58,15 @@ class PortofolioRepository
     {
         return DB::table('portofolios')->where('id', $id)->first();
     }
+
+    public function getTotalCount($status = 'active')
+    {
+        $query = DB::table('portofolios');
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->count();
+    }
 }

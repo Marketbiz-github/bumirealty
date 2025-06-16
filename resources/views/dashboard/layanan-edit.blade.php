@@ -53,10 +53,10 @@
                     </div>
                 </div>
 
-                <!-- Description with TinyMCE -->
+                <!-- Description Textarea -->
                 <div class="grid grid-cols-1 space-y-2">
                     <x-input-label for="description" value="Deskripsi *" />
-                    <textarea id="description" name="description" class="mt-1 block w-full">{{ old('description', $service->description ?? '') }}</textarea>
+                    <textarea id="description" name="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" rows="4" required>{{ old('description', $service->description ?? '') }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
 
@@ -98,16 +98,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
 <script>
-    // TinyMCE Init
-    tinymce.init({
-        selector: '#description',
-        height: 300,
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-    });
-
     // Icon Preview
     const iconUpload = document.getElementById('icon-upload');
     const iconPreview = document.getElementById('icon-preview');

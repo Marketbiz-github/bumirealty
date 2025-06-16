@@ -23,8 +23,20 @@ class ServiceRepository
     {
         return DB::table('services')->where('id', $id)->update($data);
     }
+    
     public function create($data)
     {
         return DB::table('services')->insert($data);
+    }
+
+    public function getTotalCount($status = 'active')
+    {
+        $query = DB::table('services');
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->count();
     }
 }

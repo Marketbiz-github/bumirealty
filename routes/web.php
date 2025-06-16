@@ -9,6 +9,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\PortofolioController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/kavling', [HomeController::class, 'showProduct'])->name('home.product');
@@ -19,9 +20,7 @@ Route::get('/galeri', [HomeController::class, 'showGallery'])->name('home.Galler
 Route::get('/artikel', [HomeController::class, 'showArticles'])->name('home.articles');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
-    Route::get('/', function () {
-        return view('dashboard.dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('kavling')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');

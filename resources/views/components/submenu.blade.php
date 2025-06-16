@@ -60,11 +60,10 @@
                     </p>
 
                     <a 
-                        :href="'https://wa.me/' + @js($settings['whatsapp'])"
+                        href="https://wa.me/{{ $settings['whatsapp'] }}"
                         target="_blank"
-                        rel="noopener"
-                        class="mt-6 px-4 py-2 bg-[#1E605C] text-white text-sm rounded hover:bg-teal-700 flex items-center justify-center gap-2 w-fit"
-                    >
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center px-4 py-2 bg-[#1E605C] border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-700 focus:outline-none transition ease-in-out duration-150">
                         Chat with us
                     </a>
                 </div>
@@ -152,11 +151,10 @@
                     <h2 class="text-xl font-bold text-gray-900 mb-4" x-text="$store.portofolioDetail.portofolio.name"></h2>
                     <p class="text-gray-700" x-html="$store.portofolioDetail.portofolio.description"></p>
                     <a 
-                        :href="'https://wa.me/' + @js($settings['whatsapp'])"
+                        href="https://wa.me/{{ $settings['whatsapp'] }}"
                         target="_blank"
-                        rel="noopener"
-                        class="mt-6 px-4 py-2 bg-[#1E605C] text-white text-sm rounded hover:bg-teal-700 flex items-center justify-center gap-2 w-fit"
-                    >
+                        rel="noopener noreferrer"
+                        class="mt-6 px-4 py-2 bg-[#1E605C] text-white text-sm rounded hover:bg-teal-700 flex items-center uppercase justify-center gap-2 w-fit">
                         Chat with us
                     </a>
                 </div>

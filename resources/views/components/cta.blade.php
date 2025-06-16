@@ -5,8 +5,12 @@
         <p class="text-orange-100 mb-8 max-w-2xl mx-auto">
             Hubungi tim kami untuk mendapatkan konsultasi gratis dan penawaran terbaik untuk kebutuhan properti Anda. Kami siap membantu mewujudkan investasi Anda.
         </p>
-        <button class="inline-flex items-center px-8 py-3 bg-[#1E605C] border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-700 focus:outline-none transition ease-in-out duration-150">
+        <a 
+            href="https://wa.me/{{ $settings['whatsapp'] }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center px-8 py-3 bg-[#1E605C] border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-700 focus:outline-none transition ease-in-out duration-150">
             Chat with us
-        </button>
+        </a>
     </div>
 </section>

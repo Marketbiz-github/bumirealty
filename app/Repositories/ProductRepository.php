@@ -152,4 +152,15 @@ class ProductRepository
     {
         DB::table($this->attributeTable)->where('product_id', $productId)->delete();
     }
+
+    public function getTotalCount($status = 'active')
+    {
+        $query = DB::table($this->table);
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->count();
+    }
 }
