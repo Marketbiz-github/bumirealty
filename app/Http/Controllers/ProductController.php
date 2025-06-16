@@ -41,6 +41,7 @@ class ProductController extends Controller
     
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -54,15 +55,11 @@ class ProductController extends Controller
                 'attributes.gmaps-url' => 'nullable|url',
             ]);
 
-            Log::info('Product data', $validated);
-
             $product = $this->productService->store(
                 $validated,
                 $request->file('thumbnail'),
                 $request->file('images')
             );
-
-            Log::info('Product created successfully', ['product_id' => $product->id]);
 
             return redirect()
                 ->route('products.index')

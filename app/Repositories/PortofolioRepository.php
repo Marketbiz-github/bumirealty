@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PortofolioRepository
 {
@@ -30,5 +31,31 @@ class PortofolioRepository
         }
 
         return $portofolios;
+    }
+
+    public function create($data)
+    {
+        $data['id'] = Str::uuid();
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        DB::table('portofolios')->insert($data);
+        return DB::table('portofolios')->where('id', $data['id'])->first();
+    }
+
+    public function update($id, $data)
+    {
+        $data['updated_at'] = now();
+        
+        DB::table('portofolios')
+            ->where('id', $id)
+            ->update($data);
+
+        return DB::table('portofolios')->where('id', $id)->first();
+    }
+    
+    public function findById($id)
+    {
+        return DB::table('portofolios')->where('id', $id)->first();
     }
 }

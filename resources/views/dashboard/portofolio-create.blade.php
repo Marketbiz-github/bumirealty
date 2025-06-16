@@ -1,0 +1,225 @@
+@extends('layouts.app')
+
+@section('title', 'Create Portofolio')
+
+@section('content')
+<div class="">
+    <x-breadcrumb :items="[
+        ['label' => 'Portofolio', 'url' => route('portofolio.index')],
+        ['label' => 'Create']
+    ]" />
+
+    <div class="mt-8">
+        <form action="{{ route('portofolio.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+
+            <div class="bg-white rounded-lg shadow p-6 space-y-5">
+                <h2 class="text-lg font-medium text-gray-900">Portofolio Information</h2>
+                
+                <!-- Name -->
+                <div>
+                    <x-input-label for="name" value="Name *" />
+                    <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
+                        :value="old('name')" required />
+                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                </div>
+
+                <!-- Description -->
+                <div class="grid grid-cols-1 space-y-2">
+                    <x-input-label for="description" value="Description *" />
+                    <textarea id="description" name="description" class="hidden">{{ old('description') }}</textarea>
+                    <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                </div>
+
+                <!-- Thumbnail -->
+                <div class="grid grid-cols-1 space-y-2">
+                    <x-input-label for="thumbnail" value="Thumbnail Image *" />
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center w-full">
+                            <label for="thumbnail-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Upload Thumbnail</span></p>
+                                    <p class="text-xs text-gray-500">PNG, JPG up to 1MB</p>
+                                </div>
+                            </label>
+                            <input id="thumbnail-upload" type="file" name="thumbnail" 
+                                accept="image/png, image/jpeg"
+                                style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
+                                aria-label="Upload thumbnail image" />
+                        </div>
+                        <div id="thumbnail-preview" class="hidden">
+                            <div class="relative w-40 h-40 rounded-lg overflow-hidden bg-gray-100">
+                                <img src="" class="w-full h-full object-cover" />
+                                <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 hover:opacity-100 transition-all flex items-center justify-center">
+                                    <button type="button" id="remove-thumbnail" class="p-2 bg-red-500 rounded-full text-white hover:bg-red-600 focus:outline-none">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <x-input-error :messages="$errors->get('thumbnail')" class="mt-2" />
+                    </div>
+                </div>
+
+                <!-- Additional Images -->
+                <div class="grid grid-cols-1 space-y-2">
+                    <x-input-label for="image" value="Additional Images * (Min. 1 Required)" />
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center w-full">
+                            <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Upload Images</span></p>
+                                    <p class="text-xs text-gray-500">PNG, JPG up to 2MB each (Max 5 images)</p>
+                                </div>
+                            </label>
+                            <input id="image-upload" type="file" name="images[]" multiple 
+                                accept="image/png, image/jpeg"
+                                style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
+                                aria-label="Upload additional images" />
+                        </div>
+                        <div id="image-preview" class="grid grid-cols-2 gap-4 md:grid-cols-5"></div>
+                        <x-input-error :messages="$errors->get('images')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <x-secondary-button onclick="history.back()">Cancel</x-secondary-button>
+                <x-primary-button>Save</x-primary-button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // TinyMCE Init
+    tinymce.init({
+        selector: '#description',
+        height: 300,
+        plugins: ['lists', 'link'],
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist'
+    });
+
+    // Image preview and validation code
+    const imageUpload = document.getElementById('image-upload');
+    const imagePreview = document.getElementById('image-preview');
+    const maxImages = 5;
+    let currentImages = 0;
+
+    // Image Upload Handler with FormData tracking
+    imageUpload?.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length + currentImages > maxImages) {
+            alert(`Maximum ${maxImages} images allowed`);
+            return;
+        }
+
+        files.forEach((file, index) => {
+            if (file.size > 2 * 1024 * 1024) {
+                alert(`File "${file.name}" exceeds 2MB size limit`);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative group aspect-square rounded-lg overflow-hidden bg-gray-100';
+                wrapper.dataset.fileIndex = index; // Track file index
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                        <button type="button" class="p-2 bg-red-500 rounded-full text-white hover:bg-red-600 focus:outline-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="hidden" name="image_order[]" value="${currentImages}">
+                `;
+
+                // Add delete functionality
+                wrapper.querySelector('button').onclick = () => {
+                    wrapper.remove();
+                    currentImages--;
+                    updateImageOrder();
+                };
+
+                imagePreview.appendChild(wrapper);
+                currentImages++;
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Update image order
+    function updateImageOrder() {
+        const inputs = imagePreview.querySelectorAll('input[name="image_order[]"]');
+        inputs.forEach((input, index) => {
+            input.value = index;
+        });
+    }
+
+    // Thumbnail preview handler
+    const thumbnailUpload = document.getElementById('thumbnail-upload');
+    const thumbnailPreview = document.getElementById('thumbnail-preview');
+    const removeThumbnailBtn = document.getElementById('remove-thumbnail');
+
+    thumbnailUpload?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file.size > 1024 * 1024) {
+            alert('Thumbnail size should not exceed 1MB');
+            this.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            thumbnailPreview.querySelector('img').src = e.target.result;
+            thumbnailPreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    removeThumbnailBtn?.addEventListener('click', function() {
+        thumbnailPreview.classList.add('hidden');
+        thumbnailUpload.value = '';
+    });
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!thumbnailUpload.files[0]) {
+            alert('Please select a thumbnail image');
+            return;
+        }
+
+        if (currentImages === 0) {
+            alert('Please upload at least one additional image');
+            return;
+        }
+
+        if (!tinymce.get('description').getContent()) {
+            alert('Please enter a description');
+            return;
+        }
+
+        // If all validation passes, submit the form
+        this.submit();
+    });
+});
+</script>
+@endsection
