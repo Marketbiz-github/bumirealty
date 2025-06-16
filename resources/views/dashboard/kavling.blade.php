@@ -23,7 +23,7 @@
                 :data="$products"
                 :columns="[
                     ['key' => 'index', 'label' => 'No.' , 'type' => 'index'],
-                    ['key' => 'image', 'label' => 'Gambar', 'type' => 'image', 'width' => 'w-20 h-20'],
+                    ['key' => 'image', 'label' => 'Thumbnail', 'type' => 'image', 'width' => 'w-20 h-20'],
                     ['key' => 'name', 'label' => 'Nama Kavling' , 'type' => 'text'],
                     ['key' => 'price', 'label' => 'Harga', 'type' => 'price'],
                     ['key' => 'status', 'label' => 'Status', 'type' => 'status'],

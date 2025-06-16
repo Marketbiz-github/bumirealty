@@ -35,7 +35,7 @@
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <!-- Logo Upload -->
                     <div class="space-y-2">
-                        <x-input-label for="logo" value="Logo" />
+                        <x-input-label for="logo" value="Logo *" />
                         <div class="space-y-4">
                             <div class="flex items-center justify-center w-full">
                                 <label for="logo-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
@@ -61,7 +61,7 @@
 
                     <!-- Favicon Upload -->
                     <div class="space-y-2">
-                        <x-input-label for="favicon" value="Favicon" />
+                        <x-input-label for="favicon" value="Favicon *" />
                         <div class="space-y-4">
                             <div class="flex items-center justify-center w-full">
                                 <label for="favicon-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">

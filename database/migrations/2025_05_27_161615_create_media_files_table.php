@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('media_files', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('usage_id')->nullable();     // ID dari yang menggunakan. multi image (product_id, banner_id, etc.)
+            $table->string('name')->nullable(); 
             $table->string('url');
             $table->string('usage_type')->nullable(); // 'product', 'gallery', 'banner', etc.
             $table->boolean('is_main')->default(false);

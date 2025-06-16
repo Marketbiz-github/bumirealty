@@ -24,10 +24,10 @@
                 :columns="[
                     ['key' => 'index', 'label' => 'No.', 'type' => 'index'],
                     ['key' => 'thumbnail_url', 'label' => 'Thumbnail', 'type' => 'image', 'width' => 'w-20 h-20'],
-                    ['key' => 'name', 'label' => 'Name', 'type' => 'text'],
-                    ['key' => 'description', 'label' => 'Description', 'type' => 'text', 'class' => 'whitespace-normal max-w-md break-words'],
+                    ['key' => 'name', 'label' => 'Nama', 'type' => 'text'],
+                    ['key' => 'description', 'label' => 'Deskripsi', 'type' => 'text', 'class' => 'whitespace-normal max-w-md break-words'],
                     ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
-                    ['key' => 'created_at', 'label' => 'Created At', 'type' => 'date'],
+                    ['key' => 'created_at', 'label' => 'Tanggal Dibuat', 'type' => 'date'],
                 ]"
                 :has-actions="true"
                 route-prefix="portofolio"

@@ -19,7 +19,7 @@
                 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <x-input-label for="name" value="Nama" />
+                        <x-input-label for="name" value="Nama *" />
                         <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
                             :value="old('name')" required />
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -28,7 +28,7 @@
 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <x-input-label for="price" value="Harga" />
+                        <x-input-label for="price" value="Harga *" />
                         <div class="mt-1 relative rounded-md shadow-sm">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <span class="text-gray-500 sm:text-sm">Rp</span>
@@ -40,13 +40,13 @@
                     </div>
 
                     <div>
-                        <x-input-label for="luas" value="Luas Tanah (satuan harga)" />
+                        <x-input-label for="luas" value="Luas Tanah (satuan untuk harga) *" />
                         <x-text-input id="luas" name="attributes[luas-tanah]" type="text" class="mt-1 block w-full" 
                             :value="old('attributes.luas-tanah')" required />
                     </div>
 
                     <div>
-                        <x-input-label for="lokasi" value="Lokasi" />
+                        <x-input-label for="lokasi" value="Lokasi *" />
                         <x-text-input id="lokasi" name="attributes[lokasi]" type="text" class="mt-1 block w-full" 
                             :value="old('attributes.lokasi')" required />
                     </div>
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="description" value="Deskripsi" />
+                    <x-input-label for="description" value="Deskripsi *" />
                     <textarea id="description" name="description" class="hidden">{{ old('description') }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
@@ -82,7 +82,6 @@
                                 type="file" 
                                 name="thumbnail" 
                                 accept="image/png, image/jpeg"
-                                required
                                 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;"
                                 aria-label="Upload thumbnail image"
                             />
@@ -105,7 +104,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="image" value="Images * (Min. 1 Required)" />
+                    <x-input-label for="image" value="Images *" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">

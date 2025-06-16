@@ -103,7 +103,9 @@ $menuItems = [
                             @csrf
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
-                                    this.closest('form').submit();">
+                                    this.closest('form').submit();"
+                                    class="text-red-600 hover:bg-red-50 hover:text-red-700">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
                                 Log Out
                             </x-dropdown-link>
                         </form>
@@ -134,7 +136,7 @@ $menuItems = [
 
         <!-- Profile Section - Desktop -->
         <div class="border-t p-4">
-            <x-dropdown align="top" width="72">
+        <x-dropdown align="top" width="48">
                 <x-slot name="trigger">
                     <button class="flex items-center w-full px-3 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 rounded-lg">
                         <div class="flex items-center flex-1">
@@ -161,7 +163,9 @@ $menuItems = [
                         @csrf
                         <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
-                                this.closest('form').submit();">
+                                this.closest('form').submit();"
+                                    class="text-red-600 hover:bg-red-50 hover:text-red-700">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
                             Log Out
                         </x-dropdown-link>
                     </form>

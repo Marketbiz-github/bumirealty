@@ -18,7 +18,7 @@
                 
                 <!-- Name -->
                 <div>
-                    <x-input-label for="name" value="Name *" />
+                    <x-input-label for="name" value="Nama *" />
                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
                         :value="old('name')" required />
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -26,7 +26,7 @@
 
                 <!-- Description -->
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="description" value="Description *" />
+                    <x-input-label for="description" value="Deskripsi *" />
                     <textarea id="description" name="description" class="hidden">{{ old('description') }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
@@ -68,7 +68,7 @@
 
                 <!-- Additional Images -->
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="images" value="Additional Images * (Min. 1 Required)" />
+                    <x-input-label for="images" value="Image *" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">

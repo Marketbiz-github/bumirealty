@@ -1,42 +1,41 @@
 @extends('layouts.app')
 
-@section('title', 'Layanan')
+@section('title', 'Galeri')
 
 @section('content')
 <div class="">
-    <x-breadcrumb :items="[['label' => 'Layanan']]" />
+    <x-breadcrumb :items="[['label' => 'Galeri']]" />
 
     <div class="mt-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
-                <h1 class="text-xl font-semibold text-gray-900">Layanan</h1>
+                <h1 class="text-xl font-semibold text-gray-900">Galeri</h1>
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                <a href="{{ route('service.create') }}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
-                    Add Layanan
+                <a href="{{ route('gallery.create') }}" 
+                   class="inline-flex items-center justify-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
+                    Add Image
                 </a>
             </div>
         </div>
 
         <div class="mt-8">
             <x-data-table 
-                :data="$services"
+                :data="$galleries"
                 :columns="[
                     ['key' => 'index', 'label' => 'No.', 'type' => 'index'],
-                    ['key' => 'icon_url', 'label' => 'Image', 'type' => 'image', 'width' => 'w-12 h-12'],
-                    ['key' => 'title', 'label' => 'Judul', 'type' => 'text'],
+                    ['key' => 'url', 'label' => 'Image', 'type' => 'image', 'width' => 'w-20 h-20'],
+                    ['key' => 'name', 'label' => 'Nama', 'type' => 'text'],
                     ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
-                    ['key' => 'sort_order', 'label' => 'Urutan', 'type' => 'text'],
                     ['key' => 'created_at', 'label' => 'Tanggal Dibuat', 'type' => 'date'],
                 ]"
                 :has-actions="true"
-                route-prefix="layanan"
+                route-prefix="galeri"
                 :searchable="true"
-                :search-fields="['title']"
+                :search-fields="['name']"
                 default-sort=""
                 :default-per-page="10"
-            >
-            </x-data-table>
+            />
         </div>
     </div>
 </div>
@@ -51,7 +50,7 @@ document.addEventListener('alpine:init', () => {
         hasActions = false,
         routePrefix = '',
         searchFields = ['name'],
-        defaultSort = 'name',
+        defaultSort = '',
         defaultPerPage = 10
     }) => ({
         data,
@@ -131,8 +130,8 @@ document.addEventListener('alpine:init', () => {
                 case 'index':
                     return item.index;
                 case 'image':
-                    if (item.icon) {
-                        return `<img src="${item.icon}" class="${column.width ?? 'w-16 h-16'} object-cover rounded" alt="Gambar">`;
+                    if (item.url) {
+                        return `<img src="${item.url}" class="${column.width ?? 'w-16 h-16'} object-cover rounded" alt="Gambar">`;
                     } else {
                         return '<span class="text-gray-500">No Image</span>';
                     }

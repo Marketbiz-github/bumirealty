@@ -21,7 +21,7 @@
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div class="flex items-center gap-4">
                         <div class="flex-1">
-                            <x-input-label for="name" value="Nama" />
+                            <x-input-label for="name" value="Nama *" />
                             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
                                 :value="old('name', $product->name ?? '')" required />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -46,7 +46,7 @@
 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <x-input-label for="price" value="Harga" />
+                        <x-input-label for="price" value="Harga *" />
                         <div class="mt-1 relative rounded-md shadow-sm">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <span class="text-gray-500 sm:text-sm">Rp</span>
@@ -58,13 +58,13 @@
                     </div>
 
                     <div>
-                        <x-input-label for="luas" value="Luas Tanah (satuan harga)" />
+                        <x-input-label for="luas" value="Luas Tanah (satuan untuk harga) *" />
                         <x-text-input id="luas" name="attributes[luas-tanah]" type="text" class="mt-1 block w-full" 
                             :value="old('attributes.luas-tanah', optional(collect($product->attributes)->firstWhere('attribute_slug','luas-tanah'))->value)" required />
                     </div>
 
                     <div>
-                        <x-input-label for="lokasi" value="Lokasi" />
+                        <x-input-label for="lokasi" value="Lokasi *" />
                         <x-text-input id="lokasi" name="attributes[lokasi]" type="text" class="mt-1 block w-full" 
                             :value="old('attributes.lokasi', optional(collect($product->attributes)->firstWhere('attribute_slug','lokasi'))->value)" required />
                     </div>
@@ -77,13 +77,13 @@
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="description" value="Deskripsi" />
+                    <x-input-label for="description" value="Deskripsi *" />
                     <textarea id="description" name="description" class="hidden">{{ old('description', $product->description ?? '') }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="thumbnail" value="Thumbnail Image" />
+                    <x-input-label for="thumbnail" value="Thumbnail Image *" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="thumbnail-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="image" value="Images (Opsional, max 5)" />
+                    <x-input-label for="image" value="Images *" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="image-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">

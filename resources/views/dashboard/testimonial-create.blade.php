@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Create Testimonial')
+@section('title', 'Create Testimoni')
 
 @section('content')
 <div class="">
     <x-breadcrumb :items="[
-        ['label' => 'Testimonials', 'url' => route('testimonial.index')],
+        ['label' => 'Testimoni', 'url' => route('testimonial.index')],
         ['label' => 'Create']
     ]" />
 
@@ -14,7 +14,7 @@
             @csrf
 
             <div class="bg-white rounded-lg shadow p-6 space-y-5">
-                <h2 class="text-lg font-medium text-gray-900">Testimonial Information</h2>
+                <h2 class="text-lg font-medium text-gray-900">Testimoni Information</h2>
                 
                 <!-- Name -->
                 <div>
@@ -39,7 +39,7 @@
                     </select>
                     <x-input-error :messages="$errors->get('rating')" class="mt-2" />
                 </div>
-                
+
                 <!-- Message -->
                 <div>
                     <x-input-label for="message" value="Message" />

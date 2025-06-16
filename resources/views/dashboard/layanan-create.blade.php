@@ -20,7 +20,7 @@
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div class="flex items-center gap-4">
                         <div class="flex-1">
-                            <x-input-label for="title" value="Judul" />
+                            <x-input-label for="title" value="Judul *" />
                             <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
                                 :value="old('title')" required />
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
@@ -28,7 +28,7 @@
                     </div>
 
                     <div>
-                        <x-input-label for="sort_order" value="Urutan" />
+                        <x-input-label for="sort_order" value="Urutan *" />
                         <x-text-input id="sort_order" name="sort_order" type="number" class="mt-1 block w-full"
                             :value="old('sort_order', 1)" required min="1" />
                         <x-input-error :messages="$errors->get('sort_order')" class="mt-2" />
@@ -40,14 +40,14 @@
 
                 <!-- Description with TinyMCE -->
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="description" value="Deskripsi" />
+                    <x-input-label for="description" value="Deskripsi *" />
                     <textarea id="description" name="description" class="hidden">{{ old('description') }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
 
                 <!-- Icon Upload with Preview -->
                 <div class="grid grid-cols-1 space-y-2">
-                    <x-input-label for="icon" value="Icon" />
+                    <x-input-label for="icon" value="Image *" />
                     <div class="space-y-4">
                         <div class="flex items-center justify-center w-full">
                             <label for="icon-upload" class="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
@@ -60,7 +60,7 @@
                                 </div>
                             </label>
                             <input id="icon-upload" type="file" name="icon" accept="image/png, image/jpeg"
-                                class="hidden" aria-label="Upload icon image" required />
+                                class="hidden" aria-label="Upload icon image" />
                         </div>
 
                         <!-- Preview dibawah input -->
@@ -115,24 +115,5 @@
         }
     });
 
-    // Form Validation
-    document.getElementById('create-layanan-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Check icon
-        if (!iconUpload.files[0]) {
-            alert('Please select an icon image');
-            return;
-        }
-
-        // Check description
-        const description = tinymce.get('description').getContent();
-        if (!description) {
-            alert('Please fill in the description');
-            return;
-        }
-
-        this.submit();
-    });
 </script>
 @endsection

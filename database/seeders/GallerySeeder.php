@@ -11,13 +11,13 @@ class GallerySeeder extends Seeder
     public function run(): void
     {
         $galleryItems = [
-            ['status' => 'active'],
-            ['status' => 'active'],
-            ['status' => 'active'],
-            ['status' => 'active'],
-            ['status' => 'active'],
-            ['status' => 'inactive'],
-            ['status' => 'active'],
+            ['name' => 'Gallery Image 1', 'status' => 'active'],
+            ['name' => 'Gallery Image 2', 'status' => 'active'],
+            ['name' => 'Gallery Image 3', 'status' => 'active'],
+            ['name' => 'Gallery Image 4', 'status' => 'active'],
+            ['name' => 'Gallery Image 5', 'status' => 'active'],
+            ['name' => 'Gallery Image 6', 'status' => 'inactive'],
+            ['name' => 'Gallery Image 7', 'status' => 'active'],
         ];
 
         foreach ($galleryItems as $item) {
@@ -27,6 +27,7 @@ class GallerySeeder extends Seeder
 
             DB::table('media_files')->insert([
                 'id'          => (string) Str::uuid(),
+                'name'        => $item['name'],
                 'url'         => $imageUrl,
                 'usage_type'  => 'gallery',
                 'status'      => $item['status'],

@@ -46,7 +46,7 @@ class ProductController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'price' => 'required|numeric|min:0',
-                'description' => 'nullable',
+                'description' => 'required',
                 'thumbnail' => 'required|image|mimes:jpeg,png|max:1024',
                 'images' => 'required|array|min:1|max:5',
                 'images.*' => 'image|mimes:jpeg,png|max:2048',
@@ -116,7 +116,7 @@ class ProductController extends Controller
                 'attributes.luas-tanah' => 'required',
                 'attributes.lokasi' => 'required',
                 'attributes.gmaps-url' => 'nullable|url',
-                'remove_images' => 'nullable|array', // Add validation for removed images
+                'remove_images' => 'nullable|array', 
                 'image_order' => 'nullable|array'
             ]);
 
