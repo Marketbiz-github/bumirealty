@@ -8,6 +8,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\PortofolioController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\SettingController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/kavling', [HomeController::class, 'showProduct'])->name('home.product');
@@ -65,6 +66,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
+    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 });
 
 require __DIR__.'/auth.php';

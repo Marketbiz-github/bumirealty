@@ -3,11 +3,24 @@
 @section('content')
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center pt-16 overflow-hidden">
-        <!-- Background Video -->
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-            <source src="{{ $settings['homepage_hero'] ?? '/images/contents/vid.mp4' }}" type="video/mp4" />
-            Your browser does not support the video tag.
-        </video>
+        @php
+            $heroPath = $settings['homepage_hero'] ?? '/images/contents/vid.mp4';
+            $extension = pathinfo($heroPath, PATHINFO_EXTENSION);
+            $isVideo = in_array(strtolower($extension), ['mp4']);
+        @endphp
+
+        @if($isVideo)
+            <!-- Background Video -->
+            <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+                <source src="{{ asset($heroPath) }}" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        @else
+            <!-- Background Image -->
+            <img src="{{ asset($heroPath) }}" 
+                alt="Hero Background" 
+                class="absolute inset-0 w-full h-full object-cover z-0">
+        @endif
         
         <!-- SEO h1 (invisible but accessible) -->
         <h1 class="sr-only">{{ $settings['homepage_h1'] ?? 'Kavling Strategis Lokasi Premium - Investasi Menguntungkan' }}</h1>
