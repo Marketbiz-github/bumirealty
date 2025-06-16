@@ -50,15 +50,22 @@ class ProductController extends Controller
                 'thumbnail' => 'required|image|mimes:jpeg,png|max:1024',
                 'images' => 'required|array|min:1|max:5',
                 'images.*' => 'image|mimes:jpeg,png|max:2048',
+                'image_order' => 'required|array',
                 'attributes.luas-tanah' => 'required',
                 'attributes.lokasi' => 'required',
                 'attributes.gmaps-url' => 'nullable|url',
             ]);
 
+            // Get the ordered images array
+            $orderedImages = [];
+            foreach ($request->file('images') as $image) {
+                $orderedImages[] = $image;
+            }
+
             $product = $this->productService->store(
                 $validated,
                 $request->file('thumbnail'),
-                $request->file('images')
+                $orderedImages
             );
 
             return redirect()
