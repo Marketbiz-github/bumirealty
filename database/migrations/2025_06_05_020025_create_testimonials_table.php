@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('testimonials', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name'); 
-            $table->text('message');
+            $table->text('message')->nullable();
             $table->unsignedTinyInteger('rating')->default(5);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
