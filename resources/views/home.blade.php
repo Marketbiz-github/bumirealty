@@ -17,9 +17,26 @@
             </video>
         @else
             <!-- Background Image -->
-            <img src="{{ asset($heroPath) }}" 
-                alt="Hero Background" 
+            <img src="{{ $settings['homepage_hero'] }}"
+                alt="Banner"
                 class="absolute inset-0 w-full h-full object-cover z-0">
+
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black/40 z-10"></div>
+
+            <!-- Container dengan width yang sama persis dengan navbar -->
+            <div class="relative z-20 w-full">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="w-full md:w-2/3 lg:w-1/2 text-center lg:text-left">
+                        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                            {{ $settings['homepage_h1'] }}
+                        </h1>
+                        <p class="md:text-lg text-white/90">
+                            {{ $settings['homepage_subtitle'] }}
+                        </p>
+                    </div>
+                </div>
+            </div>
         @endif
         
         <!-- SEO h1 (invisible but accessible) -->
@@ -64,7 +81,11 @@
                 }"
             >
                 <div class="flex justify-end items-center mb-6">
-                    <span class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">See all</span>
+                    <a href="{{ route('home.product') }}"
+                        class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">
+                        See all
+                    </a>
+
                     <div class="flex space-x-2">
                         <button @click="prev" :disabled="idx === 0"
                             class="w-8 h-8 bg-orange-500 text-white rounded hover:bg-orange-600 transition disabled:opacity-50">‹</button>
@@ -139,7 +160,7 @@
                                 <img :src="service.icon" alt="" class="w-8 h-8 object-contain">
                             </div>
                             <h3 class="text-xl font-semibold text-gray-900 mb-4" x-text="service.title ?? '-'"></h3>
-                            <p class="text-gray-600 mb-4" x-html="service.description ?? '-'"></p>
+                            <p class="text-gray-600 mb-4" x-text="service.description ?? '-'"></p>
                         </div>
                     </template>
                 </div>
@@ -191,7 +212,11 @@
             >
                 
                 <div class="flex justify-end items-center mb-6">
-                    <span class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">See all</span>
+                    <a href="{{ route('home.testimonials') }}"
+                        class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">
+                        See all
+                    </a>
+
                     <div class="flex space-x-2">
                         <button @click="prev" :disabled="idx === 0"
                             class="w-8 h-8 bg-orange-500 text-white rounded hover:bg-orange-600 transition disabled:opacity-50">‹</button>
@@ -251,7 +276,11 @@
                 }"
             >
                 <div class="flex justify-end items-center mb-6">
-                    <span class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">See all</span>
+                    <a href="{{ route('home.portofolio') }}"
+                        class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">
+                        See all
+                    </a>
+
                     <div class="flex space-x-2">
                         <button @click="prev" :disabled="idx === 0"
                             class="w-8 h-8 bg-orange-500 text-white rounded hover:bg-orange-600 transition disabled:opacity-50">‹</button>
@@ -306,7 +335,10 @@
             </div>
 
             <div class="flex justify-center mb-8">
-                <span class="text-orange-500 font-bold text-center text-sm cursor-pointer hover:underline transition ease-in-out duration-150">See all</span>
+                <a href="{{ route('home.Gallery') }}"
+                    class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">
+                    See all
+                </a>
             </div>
         </div>
     </section>
@@ -322,7 +354,10 @@
             </div>
 
             <div class="flex justify-end items-center mb-6">
-                <span class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">See all</span>
+                <a href="http://artikel.bumirealty.id/"
+                    class="text-orange-500 font-bold text-sm cursor-pointer hover:underline transition ease-in-out duration-150 mr-4">
+                    See all
+                </a>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -334,8 +369,7 @@
                             @endif
                         </div>
                         <div class="p-4">
-                            {{-- Judul tidak tersedia di format baru, tampilkan "Artikel" --}}
-                            <h3 class="font-semibold text-gray-900 mb-2">Artikel</h3>
+                            <h3 class="font-semibold text-gray-900 mb-2">{{ $article['title'] }}</h3>
                             <p class="text-xs text-gray-500 mb-3">
                                 {{ \Carbon\Carbon::parse($article['date'])->format('d M Y') }}
                             </p>

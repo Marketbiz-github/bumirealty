@@ -13,7 +13,7 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Navigasi</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('home.product') }}" class="text-teal-100 hover:text-white transition">Kavling Investasi</a></li>
+                        <li><a href="{{ route('home.product') }}" class="text-teal-100 hover:text-white transition">Kavling Berjalan</a></li>
                         <li><a href="{{ route('home.services') }}" class="text-teal-100 hover:text-white transition">Produk Layanan</a></li>
                         <li><a href="{{ route('home.testimonials') }}" class="text-teal-100 hover:text-white transition">Testimoni Konsumen</a></li>
                         <li><a href="{{ route('home.portofolio') }}" class="text-teal-100 hover:text-white transition">Portofolio Project</a></li>

@@ -22,6 +22,31 @@ class SettingSeeder extends Seeder
             ['key' => 'homepage_subtitle',  'value' => 'Kavling premium di lokasi strategis'],
             ['key' => 'homepage_hero',      'value' => '/images/contents/vid.mp4'],
 
+            // kavling content
+            ['key' => 'kavling_h1',        'value' => 'Kavling Berjalan'],
+            ['key' => 'kavling_subtitle',  'value' => 'Jangan lewatkan kesempatan emas untuk memiliki kavling strategis di lokasi premium yang menjanjikan untuk kepentingan investasi yang menguntungkan.'],
+            ['key' => 'kavling_hero',      'value' => '/images/contents/bg.png'],
+
+            // layanan content
+            ['key' => 'layanan_h1',        'value' => 'Produk Layanan'],
+            ['key' => 'layanan_subtitle',  'value' => 'Kami hadir untuk memberikan solusi terbaik bagi kebutuhan Anda. Dengan pengalaman dan tim yang berpengalaman, layanan kami dikembangkan untuk memberikan hasil maksimal.'],
+            ['key' => 'layanan_hero',      'value' => '/images/contents/bg.png'],
+
+            // testimoni content
+            ['key' => 'testimoni_h1',        'value' => 'Testimonial Konsumen'],
+            ['key' => 'testimoni_subtitle',  'value' => 'Apa kata mereka yang telah menggunakan jasa BumiRealty.id'],
+            ['key' => 'testimoni_hero',      'value' => '/images/contents/bg.png'],
+
+            // portofolio content
+            ['key' => 'portofolio_h1',        'value' => 'Portofolio project'],
+            ['key' => 'portofolio_subtitle',  'value' => 'Kumpulan hasil kerja terbaik kami dalam berbagai bidang, setiap proyek mencerminkan komitmen kami terhadap kualitas, inovasi, serta kepuasan klien.'],
+            ['key' => 'portofolio_hero',      'value' => '/images/contents/bg.png'],
+
+            // galeri content
+            ['key' => 'galeri_h1',        'value' => 'Galeri Project'],
+            ['key' => 'galeri_subtitle',  'value' => 'Lihat berbagai proyek yang telah kami kerjakan, mulai dari pembangunan infrastruktur hingga pengembangan properti. Setiap proyek mencerminkan komitmen kami terhadap kualitas dan inovasi.'],
+            ['key' => 'galeri_hero',      'value' => '/images/contents/bg.png'],
+
             // Footer
             ['key' => 'footer_text',        'value' => '© ' . date('Y') . ' BumiRealty. All rights reserved.'],
 

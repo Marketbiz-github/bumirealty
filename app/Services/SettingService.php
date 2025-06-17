@@ -26,28 +26,30 @@ class SettingService
                 // Handle file uploads based on type
                 switch ($key) {
                     case 'logo':
-                        $path = $value->store('images/logo', 'public');
-                        $value = '/' . $path;
-                        break;
+                    $path = $value->store('images/logo', 'public');
+                    break;
                     
                     case 'favicon':
-                        $path = $value->store('images/favicon', 'public');
-                        $value = '/' . $path;
-                        break;
+                    $path = $value->store('images/favicon', 'public');
+                    break;
                     
                     case 'homepage_hero':
-                        $mimeType = $value->getMimeType();
-                        if (str_starts_with($mimeType, 'video/')) {
-                            $path = $value->store('videos', 'public');
-                        } else {
-                            $path = $value->store('images/hero', 'public');
-                        }
-                        $value = '/' . $path;
-                        break;
+                    $mimeType = $value->getMimeType();
+                    if (str_starts_with($mimeType, 'video/')) {
+                        $path = $value->store('videos', 'public');
+                    } else {
+                        $path = $value->store('images/hero', 'public');
+                    }
+                    break;
                     
                     default:
-                        $path = $value->store('images/contents', 'public');
-                        $value = '/' . $path;
+                    $path = $value->store('images/contents', 'public');
+                }
+
+                if (app()->environment('production')) {
+                    $value = 'https://app.bumirealty.id/public/storage/' . ltrim($path, '/');
+                } else {
+                    $value = '/' . $path;
                 }
             }
             

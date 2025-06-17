@@ -50,7 +50,12 @@ class ServiceController extends Controller
         // Handle icon upload
         if ($request->hasFile('icon')) {
             $iconPath = $request->file('icon')->store('/images/contents', 'public');
-            $validated['icon'] = '/' . $iconPath;
+
+            if (app()->environment('production')) {
+                $validated['icon'] = 'https://app.bumirealty.id/public/storage' . $iconPath;
+            } else {
+                $validated['icon'] = '/' . $iconPath;
+            }
         }
 
         $this->serviceService->create($validated);
@@ -73,7 +78,12 @@ class ServiceController extends Controller
         // Handle icon upload
         if ($request->hasFile('icon')) {
             $iconPath = $request->file('icon')->store('/images/contents', 'public');
-            $validated['icon'] = '/' . $iconPath;
+
+            if (app()->environment('production')) {
+                $validated['icon'] = 'https://app.bumirealty.id/public/storage' . $iconPath;
+            } else {
+                $validated['icon'] = '/' . $iconPath;
+            }
         } else {
             unset($validated['icon']);
         }

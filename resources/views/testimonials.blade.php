@@ -5,27 +5,41 @@
 @section('content')
 <!-- Hero Section -->
 <section class="relative h-[480px] flex items-center pt-16 overflow-hidden bg-gray-100">
-    <!-- Background Image -->
-    <img src="/images/contents/bg.png"
-         alt="Banner"
-         class="absolute inset-0 w-full h-full object-cover z-0">
+    @php
+        $heroPath = $settings['testimoni_hero'] ?? '/images/contents/vid.mp4';
+        $extension = pathinfo($heroPath, PATHINFO_EXTENSION);
+        $isVideo = in_array(strtolower($extension), ['mp4']);
+    @endphp
 
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-black/40 z-10"></div>
+    @if($isVideo)
+        <!-- Background Video -->
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="{{ asset($heroPath) }}" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+    @else
+        <!-- Background Image -->
+        <img src="{{ $settings['testimoni_hero'] }}"
+            alt="Banner"
+            class="absolute inset-0 w-full h-full object-cover z-0">
 
-    <!-- Container dengan width yang sama persis dengan navbar -->
-    <div class="relative z-20 w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="w-full md:w-2/3 lg:w-1/2 text-center lg:text-left">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-                    Testimonial Konsumen
-                </h1>
-                <p class="md:text-lg text-white/90">
-                    Apa kata mereka yang telah menggunakan jasa BumiRealty.id
-                </p>
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+
+        <!-- Container dengan width yang sama persis dengan navbar -->
+        <div class="relative z-20 w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="w-full md:w-2/3 lg:w-1/2 text-center lg:text-left">
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                        {{ $settings['testimoni_h1'] }}
+                    </h1>
+                    <p class="md:text-lg text-white/90">
+                        {{ $settings['testimoni_subtitle'] }}
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 </section>
 
 <section class="md:py-20 py-16 bg-white">

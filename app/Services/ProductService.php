@@ -57,10 +57,6 @@ class ProductService
                         'thumbnail_id' => $thumbnailMedia->id
                     ]);
 
-                    Log::info('Thumbnail uploaded', [
-                        'product_id' => $product->id,
-                        'media_id' => $thumbnailMedia->id
-                    ]);
                 } catch (\Exception $e) {
                     Log::error('Failed to upload thumbnail', [
                         'product_id' => $product->id,
@@ -80,10 +76,6 @@ class ProductService
                             $product->id, 
                             false
                         );
-                        Log::info('Additional image uploaded', [
-                            'product_id' => $product->id,
-                            'index' => $index
-                        ]);
                     } catch (\Exception $e) {
                         Log::error('Failed to upload additional image', [
                             'product_id' => $product->id,
@@ -99,10 +91,7 @@ class ProductService
             if (isset($data['attributes'])) {
                 try {
                     $this->productRepository->syncAttributes($product->id, $data['attributes']);
-                    Log::info('Product attributes synced', [
-                        'product_id' => $product->id,
-                        'attributes' => $data['attributes']
-                    ]);
+         
                 } catch (\Exception $e) {
                     Log::error('Failed to sync attributes', [
                         'product_id' => $product->id,

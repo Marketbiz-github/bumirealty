@@ -20,11 +20,19 @@ class MediaService
     {
         try {
             $path = $file->store('images/products', 'public');
-            $url = 'storage/' . $path;
+
+            // Determine base URL based on environment
+            if (app()->environment('production')) {
+                $baseUrl = 'https://app.bumirealty.id/public/storage';
+            } else {
+                $baseUrl = asset('storage');
+            }
+
+            $url = $baseUrl . '/' . $path;
 
             // Log complete data that will be inserted
             Log::info('Preparing media data for insert', [
-                'url' => asset($url),
+                'url' => $url,
                 'usage_type' => $type,
                 'usage_id' => $usageId,
                 'is_main' => $isMain,
@@ -32,17 +40,11 @@ class MediaService
             ]);
 
             $media = $this->mediaRepository->create([
-                'url' => asset($url),
+                'url' => $url,
                 'usage_type' => $type,
                 'usage_id' => $usageId,
                 'is_main' => $isMain,
                 'status' => 'active'
-            ]);
-
-            Log::info('Image uploaded successfully', [
-                'usage_id' => $usageId,
-                'path' => $path,
-                'media_id' => $media->id
             ]);
 
             return $media;
@@ -50,7 +52,6 @@ class MediaService
             // Clean up uploaded file if exists
             if ($path && Storage::exists($path)) {
                 Storage::delete($path);
-                Log::info('Cleaned up uploaded file after failure', ['path' => $path]);
             }
 
             Log::error('Failed to upload image', [
