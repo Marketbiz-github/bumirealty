@@ -9,6 +9,10 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/font.css') }}">
         <link rel="icon" type="image/png" href="{{ asset($settings['favicon'] ?? '/images/contents/favicon.ico') }}">
         <!-- Font Awesome CDN v6 -->
