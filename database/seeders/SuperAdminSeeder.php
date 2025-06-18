@@ -20,11 +20,11 @@ class SuperAdminSeeder extends Seeder
 
         // Buat user superadmin
         $user = User::firstOrCreate(
-            ['email' => 'superadmin@example.com'],
+            ['email' => 'admin@bumirealty.id'],
             [
                 'id' => (string) Str::uuid(),
-                'name' => 'Super Admin',
-                'password' => Hash::make('password'),
+                'name' => 'Admin',
+                'password' => Hash::make('#bumirealty123'),
             ]
         );
 
